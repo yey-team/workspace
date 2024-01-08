@@ -11,7 +11,8 @@
     <div class="content" :style="{ transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})` }">
       <!-- Contenu de votre plan de travail -->
 
-      <TestBox/>
+      <TestBox :position="{ x: 200, y: 500 }" content="Contenu personnalisé de la boîte" />
+      <TestBox :position="{ x: 0, y: 0 }" content="La boite 2" />
 
     </div>
   </div>
@@ -75,11 +76,15 @@ const updatePosition = () => {
 
 const handleZoom = (event) => {
   const delta = event.deltaY;
-  const zoomSpeed = 0.02;
+  let zoomSpeed = 0.02;
 
-  if (delta > 0) {
+  // Définir des valeurs minimales et maximales pour le zoom
+  const minScale = 0.1;
+  const maxScale = 2.0;
+
+  if (delta > 0 && scale.value > minScale) {
     scale.value -= zoomSpeed;
-  } else {
+  } else if (delta < 0 && scale.value < maxScale) {
     scale.value += zoomSpeed;
   }
 };

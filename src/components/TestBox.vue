@@ -1,10 +1,13 @@
 <template>
-
-    <div class="container">
-        Yey
+    <div class="container" :style="{ top: position.y + 'px', left: position.x + 'px' }">
+      <!-- Votre contenu personnalisé -->
+      {{ content }}
     </div>
-
-</template>
+  </template>
+  
+  <script setup>
+  const props = defineProps(['position', 'content']);
+  </script>  
 
 <style scoped>
 
