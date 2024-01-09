@@ -1,6 +1,6 @@
 <template>
   <div ref="myDiv" @dblclick="handleClickInside" class="content">
-    <div class="editor" @click.stop v-if="isInside">
+    <div class="editor" @click.stop v-if="isInside" @mousedown.stop>
       <div class="md-preview" v-html="renderedMarkdown"></div>
       <textarea class="text-input" v-model="textareaContent" @keyup="renderMarkdown()"></textarea>
     </div>
