@@ -1,55 +1,72 @@
 <template>
-  <div>
-    <!-- Aperçu du texte Markdown -->
-    <div class="markdown-preview" v-html="markdownPreview"></div>
-    
-    
-    <!-- Zone de texte pour l'entrée utilisateur -->
-    <textarea v-model="inputText" @input="updatePreview" class="input-text"></textarea>
-
+  <div ref="myDiv" @click="handleClickInside" class="content">
+    <div class="editor" @click.stop v-if="isInside">
+      <div v-html="renderedMarkdown"></div>
+      <textarea class="text-input" v-model="textareaContent" @keypress="renderMarkdown()"></textarea>
+    </div>
+    <div @click.stop v-else ref="markdownContent" v-html="renderedMarkdown" @click="handleClickInside"></div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import MarkdownIt from 'markdown-it';
-const md = new MarkdownIt(); // Initialiser l'instance de markdown-it
 
-// Utilisation de la réactivité de Vue pour lier la valeur du texte
-const inputText = ref("");
-const markdownPreview = ref("");
+const renderedMarkdown = ref('');
+const textareaContent = ref('');  // Utilise une variable distincte pour le contenu du textarea
+const myDiv = ref(null);
+const isInside = ref(false);
 
-// Fonction pour mettre à jour l'aperçu Markdown
-const updatePreview = () => {
-  markdownPreview.value = md.render(inputText.value);
+const handleClickInside = () => {
+  isInside.value = true;
+  console.log("inside");
+};
+
+const handleClickOutside = (event) => {
+  if (myDiv.value && !myDiv.value.contains(event.target)) {
+    console.log("outside");
+    isInside.value = false;
+    renderMarkdown();  // Ne prend pas de paramètre, utilise textareaContent.value
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("click", handleClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("click", handleClickOutside);
+});
+
+const md = new MarkdownIt();
+const renderMarkdown = () => {
+  const renderedHtml = md.render(textareaContent.value);
+  renderedMarkdown.value = renderedHtml;
+  return renderedHtml;
 };
 </script>
 
 <style scoped>
-.input-text {
-  width: auto;
-
-  height: auto;
-  overflow: auto;
-
-  background-color: var(--main-div-color);
-  color: var(--main-text-color);
-  border: 1px solid var(--border-color);
-  
-  padding: 1rem;
+.content {
+  width: 100%;
+  height: 100%;
+  min-height: 100px;
+  border: solid 1px white;
 }
 
-.markdown-preview {
-  
-  width: auto;
 
-  height: auto;
-  overflow: auto;
+.editor{
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
 
-  background-color: var(--main-div-color);
-  color: var(--main-text-color);
-  border: 1px solid var(--border-color);
-  
-  padding: 1rem;
+.text-input{
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  min-height: 100px;
+  min-width: 200px;
 }
 </style>
