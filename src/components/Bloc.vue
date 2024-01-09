@@ -7,14 +7,30 @@
   >
     <!-- Votre contenu personnalisé -->
     {{ content }}
+
+    <br>
+
+    <ImageBloc/>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
+import TextBloc from './TextBloc.vue';
+import ImageBloc from './ImageBloc.vue';
+
+let magnetEffectSize = 10;
 
 const props = defineProps(['position', 'content', 'scale']);
 const emits = defineEmits();
+
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                               Dragging system                              */
+/* -------------------------------------------------------------------------- */
+
 
 const isDragging = ref(false);
 const lastMousePosition = ref({ x: 0, y: 0 });
@@ -60,6 +76,13 @@ const handleDrag = (event) => {
 const stopDrag = () => {
   if (isDragging.value) {
     isDragging.value = false;
+
+    const newBoxPosition = {
+      x: Math.round(boxPosition.value.x / magnetEffectSize ) * magnetEffectSize,
+      y: Math.round(boxPosition.value.y / magnetEffectSize ) * magnetEffectSize,
+    }
+
+    updatePosition(newBoxPosition)
   }
 };
 </script>
