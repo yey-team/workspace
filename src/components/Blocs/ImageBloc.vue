@@ -1,34 +1,52 @@
 <template>
+
+
   <div ref="myDiv" @dblclick="handleClickInside" class="content" @mousedown.stop>
+
     <div class="editor" @click.stop v-if="isInside">
+
       <div class="resizable">
-        <img class="image" src="https://imgupscaler.com/images/samples/animal-after.webp">
+        <img class="image" :src="imageUrl">
       </div>
-      <input type="url" class="text-input" v-model="inputContent" @keypress="renderImage"/>
+
+      <input type="url" ref="textInput" class="text-input" v-model="imageUrl"/>
+      
     </div>
+
     <div class="resizable" @click.stop v-else ref="inputContent" @dblclick="handleClickInside">
-      <img class="image" src="https://imgupscaler.com/images/samples/animal-after.webp">
+      <img class="image" :src="imageUrl">
     </div>
+
   </div>
+
 </template>
 
+
+
 <script setup>
+
+
 import { ref, onMounted, onUnmounted } from 'vue';
 
-const inputContent = ref('');  // Utilise une variable distincte pour le contenu du textarea
+const inputContent = ref('');
 const myDiv = ref(null);
 const isInside = ref(false);
 
+const textInput = ref(null);
+
+let imageUrl = "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg";
+
+/* -------------------------------------------------------------------------- */
+/*                                Handle clicks                               */
+/* -------------------------------------------------------------------------- */
+
 const handleClickInside = () => {
   isInside.value = true;
-  console.log("inside");
 };
 
 const handleClickOutside = (event) => {
   if (myDiv.value && !myDiv.value.contains(event.target)) {
-    console.log("outside");
     isInside.value = false;
-    renderImage();
   }
 };
 
@@ -40,15 +58,12 @@ onUnmounted(() => {
   document.removeEventListener("click", handleClickOutside);
 });
 
-const renderImage = (event) => {
-  if (event){
-    if (event.keypress == "enter"){
-      console.log('yey')
-    }
-  }else{
-    console.log('yey')
-  }
-};
+
+
+/* -------------------------------------------------------------------------- */
+/*                                   Render                                   */
+/* -------------------------------------------------------------------------- */
+
 </script>
 
 <style scoped>
