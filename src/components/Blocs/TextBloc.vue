@@ -1,10 +1,10 @@
 <template>
-  <div ref="myDiv" @click="handleClickInside" class="content">
+  <div ref="myDiv" @dblclick="handleClickInside" class="content">
     <div class="editor" @click.stop v-if="isInside">
       <div class="md-preview" v-html="renderedMarkdown"></div>
-      <textarea class="text-input" v-model="textareaContent" @keypress="renderMarkdown()"></textarea>
+      <textarea class="text-input" v-model="textareaContent" @keyup="renderMarkdown()"></textarea>
     </div>
-    <div class="md-preview" @click.stop v-else ref="markdownContent" v-html="renderedMarkdown" @click="handleClickInside"></div>
+    <div class="md-preview" @click.stop v-else ref="markdownContent" v-html="renderedMarkdown" @dblclick="handleClickInside"></div>
   </div>
 </template>
 
@@ -48,9 +48,10 @@ const renderMarkdown = () => {
 
 <style scoped>
 .content {
-  width: 100%;
+  width: max-content;
   height: 100%;
   min-height: 100px;
+  min-width: 200px;
   
 }
 
@@ -84,7 +85,7 @@ const renderMarkdown = () => {
 
 
 
-.md-preview{
+.md-preview {
   border: solid 1px var(--border-color);
   border-radius: var(--large-border-radius);
 
@@ -93,7 +94,7 @@ const renderMarkdown = () => {
   background-color: var(--main-background-color);
 }
 
-pre {
+.md-preview pre {
   padding: 0.5rem;
   border-radius: calc(var(--large-border-radius) / 2);
   background-color: black;
