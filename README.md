@@ -1,7 +1,21 @@
-# Vue 3 + Vite
+# Workspace
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Ce projet est un outil pour la yey team. 
 
-## Recommended IDE Setup
+L'obectif est de centraliser tout les outils que nous utilisons :
+- Discord (chat)
+- Notion (organisation)
+- Excalidraw (schémas)
+- Google Drive (base de donnée)
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+Ce projet a donc pour obectif d'être un plan de travail infini et collaboratif qui sert de plateforme d'échange et d'organisation.
+
+# Demo
+
+![workspace-presentation](https://github.com/yey-team/workspace/assets/71207643/c49a9b90-339a-4045-9597-e1712e3f5793)
+
+# Lancer le projet 
+
+```bash
+npm run dev
+```
