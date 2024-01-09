@@ -20,9 +20,9 @@ import { ref, shallowRef, onMounted, onBeforeUnmount } from 'vue';
 import TextBloc from './Blocs/TextBloc.vue';
 import ImageBloc from './Blocs/ImageBloc.vue';
 
-let magnetEffectSize = 10;
+let magnetEffectSize = 20;
 
-const props = defineProps(['position', 'content', 'scale']);
+const props = defineProps(['position', 'content', 'scale', 'type']);
 const emits = defineEmits();
 
 
@@ -30,16 +30,20 @@ const emits = defineEmits();
 /*                             Variable Component                             */
 /* -------------------------------------------------------------------------- */
 
-const listOfComponents = shallowRef([TextBloc, ImageBloc])
+const listOfComponents = shallowRef({"text": TextBloc, 
+                                      "image": ImageBloc
+                                    })
 
 const selectedComponent = shallowRef(null);
 
 // Fonction pour changer le composant sélectionné
-const changeComponent = () => {
-  var randomComponent = listOfComponents.value[Math.floor(Math.random()*listOfComponents.value.length)];
-  console.log(randomComponent)
+const selectComponent = () => {
+  // var randomComponent = listOfComponents.value[Math.floor(Math.random()*listOfComponents.value.length)];
+  console.log(props.type)
+  console.log(listOfComponents.value[props.type]);
 
-  selectedComponent.value = randomComponent;
+
+  selectedComponent.value = listOfComponents.value[props.type];
 };
 
 
@@ -54,7 +58,7 @@ const boxPosition = ref({ x: props.position.x, y: props.position.y });
 
 onMounted(() => {
   document.addEventListener('mousemove', handleDrag);
-  changeComponent()
+  selectComponent()
 });
 
 onBeforeUnmount(() => {

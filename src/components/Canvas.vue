@@ -7,10 +7,18 @@
           :key="index"
           :position="box.position"
           :scale="scale"
+          :type="box.type"
           :content="box.content"
         />
+
+        <button @click="newBloc('text')">
+          Ajouter un bloc
+
+        </button>
       </div>
     </div>
+
+    
   </template>
   
   
@@ -32,13 +40,29 @@
   
     const boxes = ref([{
                       position: {x: 50,y: 50},
-                      content: 'Boîte 1'
+                      content: 'Boîte 1',
+                      type: "image"
                     },{
                       position: {x: 200,y: 100},
-                      content: 'Boîte 2'},
+                      content: 'Boîte 2',
+                      type: "text"
+                    }
                     ]);
   
   
+
+    const newBloc = (blocType) => {
+      boxes.value.push({position: {x: 0,y: 0},
+                          content: "Boîte " + (boxes.value.length + 1),
+                          type: blocType
+                        })
+    }
+
+
+    /* -------------------------------------------------------------------------- */
+    /*                                 Drag system                                */
+    /* -------------------------------------------------------------------------- */
+
     const startDrag = (event) => {
       if (event.button === 1) {
         isDragging.value = true;
