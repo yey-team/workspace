@@ -2,7 +2,7 @@
     <div class="work-plan" @mousedown="startDrag" @mousemove="handleDrag" @mouseup="stopDrag" @mouseleave="stopDrag" @wheel.prevent="handleZoom">
       <div class="content" :style="{ transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})` }">
         <!-- Contenu de votre plan de travail -->
-        <TestBox
+        <Bloc
           v-for="(box, index) in boxes"
           :key="index"
           :position="box.position"
@@ -18,7 +18,7 @@
     import {
       ref
     } from 'vue';
-    import TestBox from './TestBox.vue';
+    import Bloc from './Bloc.vue';
     
 
     
