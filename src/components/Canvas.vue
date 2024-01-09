@@ -6,9 +6,8 @@
           v-for="(box, index) in boxes"
           :key="index"
           :position="box.position"
+          :scale="scale"
           :content="box.content"
-          @drag="updateBoxPosition(index, $event)"
-          @stop-drag="stopDragBox()"
         />
       </div>
     </div>
@@ -20,40 +19,26 @@
       ref
     } from 'vue';
     import TestBox from './TestBox.vue';
+    
+
+    
     const isDragging = ref(false);
+
+    const lastMousePosition = ref({x: 0,y: 0});
   
-    const lastMousePosition = ref({
-      x: 0,
-      y: 0
-    });
-  
-    const translate = ref({
-      x: 0,
-      y: 0
-    });
+    const translate = ref({x: 0,y: 0});
   
     const scale = ref(1);
   
-    const velocity = ref({
-      x: 0,
-      y: 0
-    });
+    const velocity = ref({x: 0,y: 0});
   
     const boxes = ref([{
-        position: {
-          x: 50,
-          y: 50
-        },
-        content: 'Boîte 1'
-      },
-      {
-        position: {
-          x: 200,
-          y: 100
-        },
-        content: 'Boîte 2'
-      },
-    ]);
+                      position: {x: 50,y: 50},
+                      content: 'Boîte 1'
+                    },{
+                      position: {x: 200,y: 100},
+                      content: 'Boîte 2'},
+                    ]);
   
   
     const startDrag = (event) => {
@@ -111,37 +96,35 @@
   
   
     const handleZoom = (event) => {
-  
       const delta = event.deltaY;
-      let zoomSpeed = 0.02;
-  
+      const zoomSpeed = 0.02;
+
+      // Position du centre de l'écran
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
       // Définir des valeurs minimales et maximales pour le zoom
       const minScale = 0.1;
       const maxScale = 2.0;
-  
-      if (delta > 0 && scale.value > minScale) {
-        scale.value -= zoomSpeed;
-      } else if (delta < 0 && scale.value < maxScale) {
-        scale.value += zoomSpeed;
-      }
-  
-    };
-  
-  
-    const updateBoxPosition = (index, newPosition) => {
-      // Mettre à jour la position de la boîte avec la nouvelle position
-      console.log("dragging box : ", index, "position :", newPosition);
-      boxes.value[index].position = newPosition;
-      updatePosition();
+
+      // Calculer le nouveau niveau de zoom
+      const newScale = scale.value + (delta > 0 ? -zoomSpeed : zoomSpeed);
+
+      // Limiter le niveau de zoom dans les limites spécifiées
+      const clampedScale = Math.max(minScale, Math.min(maxScale, newScale));
+
+      // Ajuster la translation pour centrer le zoom au milieu de l'écran
+      translate.value.x = (translate.value.x - centerX) * (clampedScale / scale.value) + centerX;
+      translate.value.y = (translate.value.y - centerY) * (clampedScale / scale.value) + centerY;
+
+      // Mettre à jour l'échelle
+      scale.value = clampedScale;
     };
 
 
-    const stopDragBox = () => {
-      console.log("stop drag")
-      isDragging.value = false;
-      updatePosition();
-    };
+
   
+
     
   </script>
   

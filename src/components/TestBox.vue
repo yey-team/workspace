@@ -1,27 +1,33 @@
 <template>
   <div
     class="container"
-    :style="{ top: boxPosition.y + 'px', left: boxPosition.x + 'px', transform: `scale(${zoom})` }"
+    :style="{ top: boxPosition.y + 'px', left: boxPosition.x + 'px'}"
     @mousedown="startDrag"
-    @mousemove="handleDrag"
     @mouseup="stopDrag"
-    @wheel.prevent="handleZoom"
   >
     <!-- Votre contenu personnalisé -->
     {{ content }}
+    {{ boxPosition }}
   </div>
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
-const props = defineProps(['position', 'content']);
+const props = defineProps(['position', 'content', 'scale']);
 const emits = defineEmits();
 
 const isDragging = ref(false);
 const lastMousePosition = ref({ x: 0, y: 0 });
-const zoom = ref(1);
 const boxPosition = ref({ x: props.position.x, y: props.position.y });
+
+onMounted(() => {
+  document.addEventListener('mousemove', handleDrag);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('mousemove', handleDrag);
+});
 
 const startDrag = (event) => {
   if (event.button === 0) {
@@ -30,37 +36,32 @@ const startDrag = (event) => {
   }
 };
 
+const updatePosition = (newPosition) => {
+  boxPosition.value = newPosition;
+};
+
 const handleDrag = (event) => {
   if (isDragging.value) {
-    const deltaX = (event.clientX - lastMousePosition.value.x) / zoom.value;
-    const deltaY = (event.clientY - lastMousePosition.value.y) / zoom.value;
+    const deltaX = event.movementX || (event.clientX - lastMousePosition.value.x);
+    const deltaY = event.movementY || (event.clientY - lastMousePosition.value.y);
+
+    const speedFactor = 1 / props.scale;
 
     const newBoxPosition = {
-      x: boxPosition.value.x + deltaX,
-      y: boxPosition.value.y + deltaY,
+      x: boxPosition.value.x + (deltaX * speedFactor),
+      y: boxPosition.value.y + (deltaY * speedFactor),
     };
 
-    // Émettre les coordonnées absolues de la boîte
-    emits('drag', { x: newBoxPosition.x, y: newBoxPosition.y });
+    updatePosition(newBoxPosition);
 
     lastMousePosition.value = { x: event.clientX, y: event.clientY };
   }
 };
 
 const stopDrag = () => {
-  isDragging.value = false;
-  emits('stop-drag');
-
-};
-
-const handleZoom = (event) => {
-  const delta = event.deltaY;
-  const zoomSpeed = 0.02;
-
-  if (delta > 0) {
-    zoom.value -= zoomSpeed;
-  } else {
-    zoom.value += zoomSpeed;
+  if (isDragging.value) {
+    isDragging.value = false;
+    emits('stop-drag');
   }
 };
 </script>
