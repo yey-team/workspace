@@ -12,8 +12,10 @@
         />
 
         <button @click="newBloc('text')">
-          Ajouter un bloc
-
+          Ajouter un bloc de text
+        </button>
+        <button @click="newBloc('image')">
+          Ajouter un bloc d'image
         </button>
       </div>
     </div>

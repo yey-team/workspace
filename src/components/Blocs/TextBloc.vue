@@ -12,19 +12,31 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import MarkdownIt from 'markdown-it';
 
+
 const renderedMarkdown = ref('');
 const textareaContent = ref('');  // Utilise une variable distincte pour le contenu du textarea
 const myDiv = ref(null);
 const isInside = ref(false);
 
+
+
+/* -------------------------------------------------------------------------- */
+/*                                 Drag system                                */
+/* -------------------------------------------------------------------------- */
+
+
 const handleClickInside = () => {
+  // Inside
+
+  console.log("inside")
   isInside.value = true;
-  console.log("inside");
+  
 };
 
 const handleClickOutside = (event) => {
   if (myDiv.value && !myDiv.value.contains(event.target)) {
-    console.log("outside");
+    // Outside
+
     isInside.value = false;
     renderMarkdown();  // Ne prend pas de paramètre, utilise textareaContent.value
   }
@@ -38,12 +50,20 @@ onUnmounted(() => {
   document.removeEventListener("click", handleClickOutside);
 });
 
+
+/* -------------------------------------------------------------------------- */
+/*                               Markdown render                              */
+/* -------------------------------------------------------------------------- */
+
+
 const md = new MarkdownIt();
 const renderMarkdown = () => {
   const renderedHtml = md.render(textareaContent.value);
   renderedMarkdown.value = renderedHtml;
   return renderedHtml;
 };
+
+
 </script>
 
 <style scoped>

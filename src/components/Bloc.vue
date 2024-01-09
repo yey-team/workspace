@@ -1,7 +1,7 @@
 <template>
   <div
     class="container"
-    :style="{ top: boxPosition.y + 'px', left: boxPosition.x + 'px'}"
+    :style="{ top: boxPosition.y + 'px', left: boxPosition.x + 'px', zIndex: index}"
     @mousedown="startDrag"
     @mouseup="stopDrag"
   >
@@ -10,7 +10,7 @@
 
     <br>
 
-    <component :is="selectedComponent" />
+    <component :is="selectedComponent" @selected="setBlocTop" @unselected="unsetBlocTop"/>
 
   </div>
 </template>
@@ -23,7 +23,6 @@ import ImageBloc from './Blocs/ImageBloc.vue';
 let magnetEffectSize = 20;
 
 const props = defineProps(['position', 'content', 'scale', 'type']);
-const emits = defineEmits();
 
 
 /* -------------------------------------------------------------------------- */
@@ -37,14 +36,29 @@ const listOfComponents = shallowRef({"text": TextBloc,
 const selectedComponent = shallowRef(null);
 
 // Fonction pour changer le composant sélectionné
-const selectComponent = () => {
-  // var randomComponent = listOfComponents.value[Math.floor(Math.random()*listOfComponents.value.length)];
-  console.log(props.type)
-  console.log(listOfComponents.value[props.type]);
-
-
+const selectComponentToCreate = () => {
   selectedComponent.value = listOfComponents.value[props.type];
 };
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                                Z Index blocs                               */
+/* -------------------------------------------------------------------------- */
+
+
+const index = ref(0);
+
+const setBlocTop = () => {
+  console.log("go on top")
+  index.value = 10;
+}
+
+const unsetBlocTop = () => {
+  console.log("go on back")
+  index.value = 0;
+}
+
 
 
 /* -------------------------------------------------------------------------- */
@@ -58,7 +72,7 @@ const boxPosition = ref({ x: props.position.x, y: props.position.y });
 
 onMounted(() => {
   document.addEventListener('mousemove', handleDrag);
-  selectComponent()
+  selectComponentToCreate()
 });
 
 onBeforeUnmount(() => {
@@ -67,6 +81,9 @@ onBeforeUnmount(() => {
 
 const startDrag = (event) => {
   if (event.button === 0) {
+    // Is dragging
+    setBlocTop()
+
     isDragging.value = true;
     lastMousePosition.value = { x: event.clientX, y: event.clientY };
   }
@@ -96,6 +113,9 @@ const handleDrag = (event) => {
 
 const stopDrag = () => {
   if (isDragging.value) {
+    // Is not dragging
+    unsetBlocTop()
+
     isDragging.value = false;
 
     const newBoxPosition = {
