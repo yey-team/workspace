@@ -10,7 +10,8 @@
 
     <br>
 
-    <ImageBloc/>
+    <component :is="selectedComponent" />
+
   </div>
 </template>
 
@@ -25,6 +26,21 @@ const props = defineProps(['position', 'content', 'scale']);
 const emits = defineEmits();
 
 
+/* -------------------------------------------------------------------------- */
+/*                             Variable Component                             */
+/* -------------------------------------------------------------------------- */
+
+const listOfComponents = ref([TextBloc, ImageBloc])
+
+const selectedComponent = ref(null);
+
+// Fonction pour changer le composant sélectionné
+const changeComponent = () => {
+  var randomComponent = listOfComponents.value[Math.floor(Math.random()*listOfComponents.value.length)];
+  console.log(randomComponent)
+
+  selectedComponent.value = randomComponent;
+};
 
 
 /* -------------------------------------------------------------------------- */
@@ -38,6 +54,7 @@ const boxPosition = ref({ x: props.position.x, y: props.position.y });
 
 onMounted(() => {
   document.addEventListener('mousemove', handleDrag);
+  changeComponent()
 });
 
 onBeforeUnmount(() => {
