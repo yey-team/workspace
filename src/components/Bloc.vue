@@ -16,9 +16,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
-import TextBloc from './TextBloc.vue';
-import ImageBloc from './ImageBloc.vue';
+import { ref, shallowRef, onMounted, onBeforeUnmount } from 'vue';
+import TextBloc from './Blocs/TextBloc.vue';
+import ImageBloc from './Blocs/ImageBloc.vue';
 
 let magnetEffectSize = 10;
 
@@ -30,9 +30,9 @@ const emits = defineEmits();
 /*                             Variable Component                             */
 /* -------------------------------------------------------------------------- */
 
-const listOfComponents = ref([TextBloc, ImageBloc])
+const listOfComponents = shallowRef([TextBloc, ImageBloc])
 
-const selectedComponent = ref(null);
+const selectedComponent = shallowRef(null);
 
 // Fonction pour changer le composant sélectionné
 const changeComponent = () => {
@@ -112,8 +112,13 @@ const stopDrag = () => {
   border-radius: var(--large-border-radius);
   border: 1px solid var(--border-color);
   box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.25);
-  width: 200px;
-  height: 100px;
+  
+  width: auto;
+  height: auto;
+
+  min-width: 200px;
+  min-height: 100px;
+
   cursor: grab;
   transition: transform 0.2s ease-out;
 }
