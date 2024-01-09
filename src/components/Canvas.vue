@@ -15,9 +15,7 @@
   
   
   <script setup>
-    import {
-      ref
-    } from 'vue';
+    import { ref } from 'vue';
     import Bloc from './Bloc.vue';
     
 

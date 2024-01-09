@@ -1,83 +1,33 @@
 <template>
-  <!-- Conteneur principal -->
   <div
     class="container"
     :style="{ top: boxPosition.y + 'px', left: boxPosition.x + 'px'}"
-    @mousedown="(event) => { startDrag(event); changeComponent(); } "
+    @mousedown="startDrag"
     @mouseup="stopDrag"
-    @mouseleave="stopDrag"
   >
-    <!-- Contenu personnalisé (point d'injection) -->
+    <!-- Votre contenu personnalisé -->
     {{ content }}
-
-    <br>
-
-    <!-- Composant dynamique basé sur la valeur de selectedComponent -->
-    <component :is="selectedComponent"/>
   </div>
 </template>
 
 <script setup>
-import { ref, shallowRef, onMounted, onBeforeUnmount, defineProps, defineEmits } from 'vue';
-import TextBloc from './TextBloc.vue';
-import ImageBloc from './ImageBloc.vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
-
-// Taille de l'effet de magnétisme à la grille
-let gridMagnetEffectSize = 10;
-
-
-// Propriétés et émetteurs du composant
 const props = defineProps(['position', 'content', 'scale']);
 const emits = defineEmits();
 
-
-
-/* -------------------------------------------------------------------------- */
-/*                               Child Component                              */
-/* -------------------------------------------------------------------------- */
-
-
-
-// Référence réactive pour le composant sélectionné
-const selectedComponent = shallowRef(TextBloc);
-
-// Fonction pour changer le composant sélectionné
-const changeComponent = () => {
-  selectedComponent.value = selectedComponent.value === TextBloc ? ImageBloc : TextBloc;
-};
-
-
-
-/* -------------------------------------------------------------------------- */
-/*                                 Drag System                                */
-/* -------------------------------------------------------------------------- */
-
-
-// État du glisser-déposer
 const isDragging = ref(false);
-
-// Dernière position de la souris
 const lastMousePosition = ref({ x: 0, y: 0 });
-
-// Position du conteneur
 const boxPosition = ref({ x: props.position.x, y: props.position.y });
 
-
-
-// Gestion de l'événement après le montage du composant
 onMounted(() => {
   document.addEventListener('mousemove', handleDrag);
 });
 
-// Gestion de l'événement avant le démontage du composant
 onBeforeUnmount(() => {
   document.removeEventListener('mousemove', handleDrag);
 });
 
-
-
-// Fonction pour démarrer le glisser-déposer
 const startDrag = (event) => {
   if (event.button === 0) {
     isDragging.value = true;
@@ -85,16 +35,10 @@ const startDrag = (event) => {
   }
 };
 
-
-
-// Fonction pour mettre à jour la position du conteneur
 const updatePosition = (newPosition) => {
   boxPosition.value = newPosition;
 };
 
-
-
-// Gestion du glisser-déposer
 const handleDrag = (event) => {
   if (isDragging.value) {
     const deltaX = event.movementX || (event.clientX - lastMousePosition.value.x);
@@ -102,40 +46,22 @@ const handleDrag = (event) => {
 
     const speedFactor = 1 / props.scale;
 
-    // Nouvelle position du conteneur
     const newBoxPosition = {
       x: boxPosition.value.x + (deltaX * speedFactor),
       y: boxPosition.value.y + (deltaY * speedFactor),
     };
 
-    // Mise à jour de la position
     updatePosition(newBoxPosition);
 
-    // Mise à jour de la dernière position de la souris
     lastMousePosition.value = { x: event.clientX, y: event.clientY };
   }
 };
 
-
-
-// Fonction pour arrêter le glisser-déposer
 const stopDrag = () => {
   if (isDragging.value) {
     isDragging.value = false;
-
-    // Nouvelle position avec effet de magnétisme à la grille
-    const newBoxPosition = {
-      x: Math.round(boxPosition.value.x / gridMagnetEffectSize) * gridMagnetEffectSize,
-      y: Math.round(boxPosition.value.y / gridMagnetEffectSize) * gridMagnetEffectSize,
-    };
-
-    // Mise à jour de la position
-    updatePosition(newBoxPosition);
   }
 };
-
-
-
 </script>
 
 <style scoped>
