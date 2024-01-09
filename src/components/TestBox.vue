@@ -4,10 +4,10 @@
     :style="{ top: boxPosition.y + 'px', left: boxPosition.x + 'px'}"
     @mousedown="startDrag"
     @mouseup="stopDrag"
+    @mouseleave="stopDrag"
   >
     <!-- Votre contenu personnalisé -->
     {{ content }}
-    {{ boxPosition }}
   </div>
 </template>
 
@@ -20,6 +20,10 @@ const emits = defineEmits();
 const isDragging = ref(false);
 const lastMousePosition = ref({ x: 0, y: 0 });
 const boxPosition = ref({ x: props.position.x, y: props.position.y });
+
+
+let gridMagnetEffectSize = 10;
+
 
 onMounted(() => {
   document.addEventListener('mousemove', handleDrag);
@@ -61,7 +65,13 @@ const handleDrag = (event) => {
 const stopDrag = () => {
   if (isDragging.value) {
     isDragging.value = false;
-    emits('stop-drag');
+
+    const newBoxPosition = {
+      x: Math.round(boxPosition.value.x / gridMagnetEffectSize) * gridMagnetEffectSize,
+      y: Math.round(boxPosition.value.y / gridMagnetEffectSize) * gridMagnetEffectSize,
+    };
+
+    updatePosition(newBoxPosition);
   }
 };
 </script>
