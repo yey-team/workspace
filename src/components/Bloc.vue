@@ -22,6 +22,23 @@ import { ref, shallowRef, onMounted, onBeforeUnmount, defineProps, defineEmits }
 import TextBloc from './TextBloc.vue';
 import ImageBloc from './ImageBloc.vue';
 
+
+// Taille de l'effet de magnétisme à la grille
+let gridMagnetEffectSize = 10;
+
+
+// Propriétés et émetteurs du composant
+const props = defineProps(['position', 'content', 'scale']);
+const emits = defineEmits();
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                               Child Component                              */
+/* -------------------------------------------------------------------------- */
+
+
+
 // Référence réactive pour le composant sélectionné
 const selectedComponent = shallowRef(TextBloc);
 
@@ -30,19 +47,23 @@ const changeComponent = () => {
   selectedComponent.value = selectedComponent.value === TextBloc ? ImageBloc : TextBloc;
 };
 
-// Propriétés et émetteurs du composant
-const props = defineProps(['position', 'content', 'scale']);
-const emits = defineEmits();
+
+
+/* -------------------------------------------------------------------------- */
+/*                                 Drag System                                */
+/* -------------------------------------------------------------------------- */
+
 
 // État du glisser-déposer
 const isDragging = ref(false);
+
 // Dernière position de la souris
 const lastMousePosition = ref({ x: 0, y: 0 });
+
 // Position du conteneur
 const boxPosition = ref({ x: props.position.x, y: props.position.y });
 
-// Taille de l'effet de magnétisme à la grille
-let gridMagnetEffectSize = 10;
+
 
 // Gestion de l'événement après le montage du composant
 onMounted(() => {
@@ -54,6 +75,8 @@ onBeforeUnmount(() => {
   document.removeEventListener('mousemove', handleDrag);
 });
 
+
+
 // Fonction pour démarrer le glisser-déposer
 const startDrag = (event) => {
   if (event.button === 0) {
@@ -62,10 +85,14 @@ const startDrag = (event) => {
   }
 };
 
+
+
 // Fonction pour mettre à jour la position du conteneur
 const updatePosition = (newPosition) => {
   boxPosition.value = newPosition;
 };
+
+
 
 // Gestion du glisser-déposer
 const handleDrag = (event) => {
@@ -89,6 +116,8 @@ const handleDrag = (event) => {
   }
 };
 
+
+
 // Fonction pour arrêter le glisser-déposer
 const stopDrag = () => {
   if (isDragging.value) {
@@ -104,6 +133,9 @@ const stopDrag = () => {
     updatePosition(newBoxPosition);
   }
 };
+
+
+
 </script>
 
 <style scoped>
