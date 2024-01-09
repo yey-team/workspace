@@ -8,6 +8,7 @@
           :position="box.position"
           :content="box.content"
           @drag="updateBoxPosition(index, $event)"
+          @stop-drag="stopDragBox()"
         />
       </div>
     </div>
@@ -91,6 +92,7 @@
       isDragging.value = false;
       updatePosition();
     };
+    
   
   
     const updatePosition = () => {
@@ -128,7 +130,16 @@
   
     const updateBoxPosition = (index, newPosition) => {
       // Mettre à jour la position de la boîte avec la nouvelle position
+      console.log("dragging box : ", index, "position :", newPosition);
       boxes.value[index].position = newPosition;
+      updatePosition();
+    };
+
+
+    const stopDragBox = () => {
+      console.log("stop drag")
+      isDragging.value = false;
+      updatePosition();
     };
   
     
