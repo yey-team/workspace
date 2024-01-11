@@ -1,5 +1,5 @@
 <template>
-    <div class="work-plan" @mousedown="startDrag" @mousemove="handleDrag" @mouseup="stopDrag" @mouseleave="stopDrag" @wheel.prevent="handleZoom">
+    <div class="work-plan" @mousedown="startDrag" @mousemove="handleDrag" @mouseup="stopDrag" @mouseleave="stopDrag" @wheel.prevent="handleZoom" v-on:click.right="openMenu($event)">
       <div class="content" :style="{ transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})` }">
         <!-- Contenu de votre plan de travail -->
         <Bloc
@@ -18,17 +18,23 @@
           Ajouter un bloc d'image
         </button>
       </div>
-    </div>
 
-    
+
+      <Menu :style="{top: `${yPointMenu}px` , left: `${xPointMenu}px`}" :configMenu="'toto'" />
+
+    </div>
   </template>
   
   
   <script setup>
     import { ref } from 'vue';
-    import Bloc from './Bloc.vue';
-    
+    import { createApp } from 'vue'
 
+    import Bloc from './Bloc.vue';
+    import Menu from './Menu.vue';
+    
+    let xPointMenu = ref(0)
+    let yPointMenu = ref(0)
     
     const isDragging = ref(false);
 
@@ -147,7 +153,19 @@
 
 
 
-  
+    /* -------------------------------------------------------------------------- */
+    /*                                 Right Click                                */
+    /* -------------------------------------------------------------------------- */
+
+    function openMenu(event){
+
+      //? Remove basic menu  
+      event.preventDefault()
+
+      console.log(event)
+      this.xPointMenu = event.clientX
+      this.yPointMenu = event.clientY
+    }
 
     
   </script>
