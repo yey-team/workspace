@@ -11,6 +11,11 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import MarkdownIt from 'markdown-it';
+import MarkdownItCheckbox from 'markdown-it-checkbox';
+
+
+
+
 
 
 const renderedMarkdown = ref('');
@@ -66,8 +71,7 @@ onUnmounted(() => {
 /*                               Markdown render                              */
 /* -------------------------------------------------------------------------- */
 
-
-const md = new MarkdownIt();
+const md = new MarkdownIt().use(MarkdownItCheckbox);
 const renderMarkdown = () => {
   const renderedHtml = md.render(textareaContent.value);
   renderedMarkdown.value = renderedHtml;
