@@ -3,7 +3,7 @@
       <div class="content" :style="{ transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})` }">
         <!-- Contenu de votre plan de travail -->
         <Bloc
-          v-for="(box, index) in boxes"
+          v-for="(box, index) in allBlock"
           :key="index"
           :position="box.position"
           :scale="scale"
@@ -28,11 +28,18 @@
   
   <script setup>
     import { ref } from 'vue';
-    import { createApp } from 'vue'
 
     import Bloc from './Bloc.vue';
     import Menu from './Menu.vue';
-    
+    import blockManagerModule from '@/helpers/blockHelper.js';
+
+
+    let blockManager = new blockManagerModule
+
+    const allBlock = ref(blockManager.boxes)
+
+    console.log(allBlock)
+
     let xPointMenu = ref(0)
     let yPointMenu = ref(0)
     
@@ -46,25 +53,7 @@
   
     const velocity = ref({x: 0,y: 0});
   
-    const boxes = ref([{
-                      position: {x: 50,y: 50},
-                      content: 'Boîte 1',
-                      type: "image"
-                    },{
-                      position: {x: 200,y: 100},
-                      content: 'Boîte 2',
-                      type: "text"
-                    }
-                    ]);
-  
-  
-
-    const newBloc = (blocType) => {
-      boxes.value.push({position: {x: 0,y: 0},
-                          content: "Boîte " + (boxes.value.length + 1),
-                          type: blocType
-                        })
-    }
+    // const boxes = 
 
 
     /* -------------------------------------------------------------------------- */
@@ -162,9 +151,11 @@
       //? Remove basic menu  
       event.preventDefault()
 
-      console.log(event)
+      // console.log(event)
       this.xPointMenu = event.clientX
       this.yPointMenu = event.clientY
+
+      blockManager.newBloc("image")
     }
 
     
