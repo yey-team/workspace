@@ -2,21 +2,37 @@
   <div ref="myDiv" @dblclick="handleClickInside" class="content">
     <div class="editor" @click.stop v-if="isInside" @mousedown.stop>
       <div class="md-preview" v-html="renderedMarkdown"></div>
-      <textarea class="text-input" v-model="textareaContent" @keyup="renderMarkdown()"></textarea>
+      <textarea class="text-input" v-model="textareaContent" :style="{ width: mdSize }" @mouseup="saveMdSize" @keyup="renderMarkdown"></textarea>
     </div>
-    <div class="md-preview" @click.stop v-else ref="markdownContent" v-html="renderedMarkdown" @dblclick="handleClickInside"></div>
+    <div class="md-preview" @click.stop v-else ref="markdownContent" v-html="renderedMarkdown" :style="{ width: mdSize }" @dblclick="handleClickInside"></div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import MarkdownIt from 'markdown-it';
+import MarkdownItCheckbox from 'markdown-it-checkbox';
+
+
+
+
 
 
 const renderedMarkdown = ref('');
 const textareaContent = ref('');  // Utilise une variable distincte pour le contenu du textarea
 const myDiv = ref(null);
 const isInside = ref(false);
+
+
+
+
+let mdSize = ref('200px'); // Variable pour stocker la largeur
+
+const saveMdSize = (event) => {
+  if (isInside.value) {
+    mdSize.value = event.target.style.width;
+  }
+};
 
 
 
@@ -55,8 +71,7 @@ onUnmounted(() => {
 /*                               Markdown render                              */
 /* -------------------------------------------------------------------------- */
 
-
-const md = new MarkdownIt();
+const md = new MarkdownIt().use(MarkdownItCheckbox);
 const renderMarkdown = () => {
   const renderedHtml = md.render(textareaContent.value);
   renderedMarkdown.value = renderedHtml;

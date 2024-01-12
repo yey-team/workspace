@@ -23,6 +23,8 @@ import ImageBloc from './Blocs/ImageBloc.vue';
 let magnetEffectSize = 20;
 
 const props = defineProps(['position', 'content', 'scale', 'type']);
+const boxPosition = ref({ x: props.position.x, y: props.position.y });
+
 
 
 /* -------------------------------------------------------------------------- */
@@ -50,12 +52,10 @@ const selectComponentToCreate = () => {
 const index = ref(0);
 
 const setBlocTop = () => {
-  console.log("go on top")
   index.value = 10;
 }
 
 const unsetBlocTop = () => {
-  console.log("go on back")
   index.value = 0;
 }
 
@@ -68,7 +68,9 @@ const unsetBlocTop = () => {
 
 const isDragging = ref(false);
 const lastMousePosition = ref({ x: 0, y: 0 });
-const boxPosition = ref({ x: props.position.x, y: props.position.y });
+
+
+
 
 onMounted(() => {
   document.addEventListener('mousemove', handleDrag);

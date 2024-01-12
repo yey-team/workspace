@@ -5,7 +5,7 @@
 
     <div class="editor" @click.stop v-if="isInside">
 
-      <div class="resizable">
+      <div class="resizable previewImage" :style="{width: imgWidth, height: imgHeight }">
         <img class="image" :src="imageUrl">
       </div>
 
@@ -13,7 +13,7 @@
       
     </div>
 
-    <div class="resizable" @click.stop v-else ref="inputContent" @dblclick="handleClickInside">
+    <div class="resizable" @click.stop v-else ref="inputContent" :style="{width: imgWidth, height: imgHeight }" @dblclick="handleClickInside" @mouseup="saveImgSize" @mouseleave="saveImgSize">
       <img class="image" :src="imageUrl">
     </div>
 
@@ -35,6 +35,20 @@ const isInside = ref(false);
 const textInput = ref(null);
 
 let imageUrl = "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg";
+
+
+
+
+const imgWidth = ref('500px'); // Variable pour stocker la largeur
+const imgHeight = ref('500px'); // Variable pour stocker la hauteur
+
+const saveImgSize = (event) => {
+  if (event.target.style.width){
+    imgWidth.value = event.target.style.width;
+    imgHeight.value = event.target.style.height;
+  }
+};
+
 
 /* -------------------------------------------------------------------------- */
 /*                                Handle clicks                               */
@@ -101,18 +115,14 @@ onUnmounted(() => {
 
 
 
-.resizable {
-  border: solid 1px var(--border-color);
-  border-radius: var(--large-border-radius);
-
-  background-color: var(--main-background-color);
-}
-
 
 .resizable {
     display: inline-block;
-    background: red;
     resize: both;
+
+    background-color: var(--main-background-color);
+    border: solid 1px var(--border-color);
+
     overflow: hidden;
     line-height: 0;
 
@@ -121,9 +131,14 @@ onUnmounted(() => {
 
     min-height: 100px;
 
-    width: max-content !important;
+    width: auto;
+    height: auto;
 
     border-radius: calc(var(--large-border-radius) / 2);
+  }
+
+  .previewImage{
+    resize: none;
   }
 
 
