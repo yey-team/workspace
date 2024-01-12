@@ -17,6 +17,11 @@
         <button @click="newBloc('image')">
           Ajouter un bloc d'image
         </button>
+        
+        
+        <button @click="goToCoords(500,500)">
+          Aller en 500x500
+        </button>
       </div>
     </div>
 
@@ -40,6 +45,12 @@
   
     const velocity = ref({x: 0,y: 0});
   
+
+
+    /* -------------------------------------------------------------------------- */
+    /*                                Blocs systems                               */
+    /* -------------------------------------------------------------------------- */
+
     const boxes = ref([{
                       position: {x: 50,y: 50},
                       content: 'Boîte 1',
@@ -54,11 +65,32 @@
   
 
     const newBloc = (blocType) => {
-      boxes.value.push({position: {x: 0,y: 0},
+      boxes.value.push({  position: {x: 0,y: 0},
                           content: "Boîte " + (boxes.value.length + 1),
                           type: blocType
                         })
     }
+
+
+    /* -------------------------------------------------------------------------- */
+    /*                                Move to view                                */
+    /* -------------------------------------------------------------------------- */
+
+
+    const goToCoords = (x=0, y=0) => {
+      x = -x
+      y = -y
+      translate.value = {x, y}
+    }
+    
+    // in progress
+    const goToBloc = (box) => {
+      console.log(box.position.x)
+      const x = -box.position.x
+      const y = -box.position.y
+      translate.value = {x, y}
+    }
+ 
 
 
     /* -------------------------------------------------------------------------- */
