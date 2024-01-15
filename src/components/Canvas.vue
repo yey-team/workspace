@@ -92,19 +92,15 @@
 
 
     const goToCoords = (x=0, y=0) => {
-      x = -x
-      y = -y
+      x = -x * scale.value;
+      y = -y * scale.value;
       translate.value = {x, y}
     }
     
     // in progress
     const goToBloc = (boxId) => {
-      
       const box = getBoxByID(boxId)
-
-      const x = -box.position.x
-      const y = -box.position.y
-      translate.value = {x, y}
+      goToCoords(box.position.x,box.position.y);
     }
  
 
