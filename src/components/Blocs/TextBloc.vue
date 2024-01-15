@@ -85,7 +85,7 @@ const renderMarkdown = () => {
 .content {
   width: max-content;
   height: 100%;
-  min-height: 100px;
+  min-height: 25px;
   min-width: 200px;
   
 }
@@ -102,7 +102,7 @@ const renderMarkdown = () => {
   width: 100%;
   height: 100%;
 
-  min-height: 100px;
+  min-height: 25px;
   min-width: 200px;
 
   border: solid 1px var(--border-color);

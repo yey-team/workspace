@@ -143,7 +143,7 @@ const stopDrag = () => {
   height: auto;
 
   min-width: 200px;
-  min-height: 100px;
+  min-height: 50px;
 
   cursor: grab;
   transition: transform 0.2s ease-out;
