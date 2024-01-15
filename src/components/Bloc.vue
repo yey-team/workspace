@@ -3,7 +3,7 @@
     class="container"
     :style="{ top: boxPosition.y + 'px', left: boxPosition.x + 'px', zIndex: index}"
     @mousedown="startDrag"
-    @mouseup="stopDrag"
+    @mouseup="() => { stopDrag(); $emit('onUpdate', {id: props.id, position: {x:boxPosition.x, y:boxPosition.y}}); }"
   >
     <!-- Votre contenu personnalisé -->
     {{ content }}
@@ -22,10 +22,10 @@ import ImageBloc from './Blocs/ImageBloc.vue';
 
 let magnetEffectSize = 20;
 
-const props = defineProps(['position', 'content', 'scale', 'type']);
+const props = defineProps(['id', 'position', 'content', 'scale', 'type']);
 const boxPosition = ref({ x: props.position.x, y: props.position.y });
 
-
+const emit = defineEmits()
 
 /* -------------------------------------------------------------------------- */
 /*                             Variable Component                             */

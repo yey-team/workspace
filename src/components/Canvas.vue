@@ -4,11 +4,12 @@
         <!-- Contenu de votre plan de travail -->
         <Bloc
           v-for="(box, index) in boxes"
-          :key="index"
+          :id="box.id"
           :position="box.position"
+          :content="box.content"
           :scale="scale"
           :type="box.type"
-          :content="box.content"
+          @onUpdate="updateBox"
         />
 
         <button @click="newBloc('text')">
@@ -21,6 +22,10 @@
         
         <button @click="goToCoords(500,500)">
           Aller en 500x500
+        </button>
+
+        <button @click="goToBloc('0')">
+          Aller à la boite n°1
         </button>
       </div>
     </div>
@@ -52,10 +57,12 @@
     /* -------------------------------------------------------------------------- */
 
     const boxes = ref([{
+                      id:"0",
                       position: {x: 50,y: 50},
                       content: 'Boîte 1',
                       type: "image"
                     },{
+                      id:"1",
                       position: {x: 200,y: 100},
                       content: 'Boîte 2',
                       type: "text"
@@ -72,9 +79,16 @@
     }
 
 
+
     /* -------------------------------------------------------------------------- */
     /*                                Move to view                                */
     /* -------------------------------------------------------------------------- */
+
+
+    const getBoxByID = (id) => {
+      const boxIndex = boxes.value.findIndex(box => box.id === id);
+      return boxes.value[boxIndex];
+    }
 
 
     const goToCoords = (x=0, y=0) => {
@@ -84,13 +98,22 @@
     }
     
     // in progress
-    const goToBloc = (box) => {
-      console.log(box.position.x)
+    const goToBloc = (boxId) => {
+      
+      const box = getBoxByID(boxId)
+
       const x = -box.position.x
       const y = -box.position.y
       translate.value = {x, y}
     }
  
+
+    const updateBox = (attributes) => {
+
+      const box = getBoxByID(attributes.id)
+
+      box.position = attributes.position
+    }
 
 
     /* -------------------------------------------------------------------------- */
