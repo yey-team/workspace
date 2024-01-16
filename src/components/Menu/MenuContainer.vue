@@ -13,7 +13,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import blockMenu from './blocMenuComponent.vue'
+import blockMenu from './BlocMenu.vue'
 
 
 const props = defineProps(['configMenu']);

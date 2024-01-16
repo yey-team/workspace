@@ -2,7 +2,7 @@
     <div class="work-plan" @mousedown="startDrag" @mousemove="handleDrag" @mouseup="stopDrag" @mouseleave="stopDrag" @wheel.prevent="handleZoom" v-on:click.right="openMenu($event)" v-on:click.left="closeMenu()">
       <div class="content" :style="{ transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})` }">
         <!-- Contenu de votre plan de travail -->
-        <Bloc
+        <Block
           v-for="(box, index) in allBlock"
           :key="index"
           :position="box.position"
@@ -12,7 +12,7 @@
           @onUpdate="updateBox"
         />
 
-        <button @click="newBloc('text')">
+        <button @click="() => {newBloc('text'); updatePosition();}">
           Ajouter un bloc de text
         </button>
         <button @click="newBloc('image')">
@@ -30,17 +30,17 @@
       </div>
 
 
-      <Menu :style="{top: `${yPointMenu}px` , left: `${xPointMenu}px`, transform: `scale(${xScaleMenu}, ${yScaleMenu})`}" :configMenu="configMenu" />
+      <Menu :style="{ top: `${yPointMenu}px` , left: `${xPointMenu}px`, transform: `scale(${xScaleMenu}, ${yScaleMenu})` }" :configMenu="configMenu" />
 
     </div>
   </template>
   
   
   <script setup>
-    import { ref, toRef } from 'vue';
+    import { ref } from 'vue';
 
-    import Bloc from './Bloc.vue';
-    import Menu from './Menu.vue';
+    import Block from './Block.vue';
+    import Menu from './Menu/MenuContainer.vue';
     
     import { boxes, newBloc } from '../helpers/blockHelper.js';
 
@@ -70,26 +70,12 @@
 
 
     /* -------------------------------------------------------------------------- */
-    /*                                Blocs systems                               */
-    /* -------------------------------------------------------------------------- */
-
-
-    // const newBloc = (blocType) => {
-    //   allBlock.value.push({  position: {x: 0,y: 0},
-    //                       content: "Boîte " + (allBlock.value.length + 1),
-    //                       type: blocType
-    //                     })
-    // }
-
-
-
-
-    /* -------------------------------------------------------------------------- */
     /*                                Move to view                                */
     /* -------------------------------------------------------------------------- */
 
 
     const getBoxByID = (id) => {
+
       const boxIndex = allBlock.value.findIndex(box => box.id === id);
       return allBlock.value[boxIndex];
     }
@@ -101,7 +87,6 @@
       translate.value = {x, y}
     }
     
-    // in progress
     const goToBloc = (boxId) => {
       const box = getBoxByID(boxId)
       goToCoords(box.position.x,box.position.y);
@@ -160,7 +145,7 @@
   
   
     const updatePosition = () => {
-      const glidingFactor = 0.92; // Facteur de glissement
+      const glidingFactor = 0.93; // Facteur de glissement
       const update = () => {
         translate.value.x += velocity.value.x;
         translate.value.y += velocity.value.y;
