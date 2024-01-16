@@ -20,28 +20,37 @@
       </div>
 
 
-      <Menu :style="{top: `${yPointMenu}px` , left: `${xPointMenu}px`}" :configMenu="'toto'" />
+      <Menu :style="{top: `${yPointMenu}px` , left: `${xPointMenu}px`}" :configMenu="configMenu" />
 
     </div>
   </template>
   
   
   <script setup>
-    import { ref } from 'vue';
+    import { ref, toRef } from 'vue';
 
     import Bloc from './Bloc.vue';
     import Menu from './Menu.vue';
     import blockManagerModule from '@/helpers/blockHelper.js';
 
 
-    let blockManager = new blockManagerModule
+    const blockManager = new blockManagerModule
+    const allBlock = ref([
+      {
+        position: {x: 50,y: 50},
+        content: 'Boîte 1',
+        type: "image"
+      },{
+        position: {x: 200,y: 100},
+        content: 'Boîte 2',
+        type: "text"
+      }
+    ])
 
-    const allBlock = ref(blockManager.boxes)
-
-    console.log(allBlock)
-
-    let xPointMenu = ref(0)
-    let yPointMenu = ref(0)
+    const xPointMenu = ref(0)
+    const yPointMenu = ref(0)
+    let configMenu = ref([])
+    
     
     const isDragging = ref(false);
 
@@ -53,9 +62,6 @@
   
     const velocity = ref({x: 0,y: 0});
   
-    // const boxes = 
-
-
     /* -------------------------------------------------------------------------- */
     /*                                 Drag system                                */
     /* -------------------------------------------------------------------------- */
@@ -154,8 +160,27 @@
       // console.log(event)
       this.xPointMenu = event.clientX
       this.yPointMenu = event.clientY
+      configMenu = [
+        {
+          type: "leave",
+          icon: "",
+          name: "leave",
+          action: "closeMenu"
+        },
+        {
+          type: "addBlock",
+          icon: "",
+          name: "Add block",
+          action: "openMenuBlock"
+        },
+        {
+          type: "removeBlock",
+          icon: "",
+          name: "remove",
+          action: "closeMenu"
+        }];
 
-      blockManager.newBloc("image")
+      // blockManager.newBloc("image")
     }
 
     

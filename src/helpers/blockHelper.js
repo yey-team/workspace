@@ -12,12 +12,10 @@ let boxes = [
 
 
 function module() {
-  this.boxes = boxes
-
-  this.newBloc = (blocType) => {
-    boxes.push(
+  this.newBloc = (allBlock, blocType) => {
+    allBlock.push(
       {position: {x: 0,y: 0},
-        content: "Boîte " + (this.boxes.length + 1),
+        content: "Boîte " + (allBlock.length + 1),
         type: blocType
       })
   }
