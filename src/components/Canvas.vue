@@ -41,18 +41,13 @@
 
     import Bloc from './Bloc.vue';
     import Menu from './Menu.vue';
+    
+    import { boxes, newBloc } from '../helpers/blockHelper.js';
 
-    const allBlock = ref([ //TODO stock in bdd
-      {
-        position: {x: 50,y: 50},
-        content: 'Boîte 1',
-        type: "image"
-      },{
-        position: {x: 200,y: 100},
-        content: 'Boîte 2',
-        type: "text"
-      }
-    ])
+
+    // const boxes = getBoxes()
+
+    const allBlock = ref(boxes)
 
     const xPointMenu = ref(0)
     const yPointMenu = ref(0)
@@ -78,27 +73,14 @@
     /*                                Blocs systems                               */
     /* -------------------------------------------------------------------------- */
 
-    /* const boxes = ref([{
-                      id:"0",
-                      position: {x: 50,y: 50},
-                      content: 'Boîte 1',
-                      type: "image"
-                    },{
-                      id:"1",
-                      position: {x: 200,y: 100},
-                      content: 'Boîte 2',
-                      type: "text"
-                    }
-                    ]); */
-  
-  
 
-    const newBloc = (blocType) => {
-      boxes.value.push({  position: {x: 0,y: 0},
-                          content: "Boîte " + (boxes.value.length + 1),
-                          type: blocType
-                        })
-    }
+    // const newBloc = (blocType) => {
+    //   allBlock.value.push({  position: {x: 0,y: 0},
+    //                       content: "Boîte " + (allBlock.value.length + 1),
+    //                       type: blocType
+    //                     })
+    // }
+
 
 
 
@@ -108,8 +90,8 @@
 
 
     const getBoxByID = (id) => {
-      const boxIndex = boxes.value.findIndex(box => box.id === id);
-      return boxes.value[boxIndex];
+      const boxIndex = allBlock.value.findIndex(box => box.id === id);
+      return allBlock.value[boxIndex];
     }
 
 

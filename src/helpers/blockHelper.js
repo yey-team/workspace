@@ -1,4 +1,4 @@
-let boxes = [
+export let boxes = [
   {
     position: {x: 50,y: 50},
     content: 'Boîte 1',
@@ -11,14 +11,16 @@ let boxes = [
 ];
 
 
-function module() {
-  this.newBloc = (allBlock, blocType) => {
-    allBlock.push(
+export function newBloc(blocType) {
+    boxes.push(
       {position: {x: 0,y: 0},
-        content: "Boîte " + (allBlock.length + 1),
+        content: "Boîte " + (boxes.length + 1),
         type: blocType
-      })
-  }
+  })
 }
 
-export default module 
+export function updateBoxes(newBoxes) {
+  boxes = newBoxes;
+}
+
+export default {newBloc, updateBoxes} 
