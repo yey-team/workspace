@@ -1,5 +1,5 @@
 <template>
-    <div class="work-plan" @mousedown="startDrag" @mousemove="handleDrag" @mouseup="stopDrag" @mouseleave="stopDrag" @wheel.prevent="handleZoom" v-on:click.right="openMenu($event)">
+    <div class="work-plan" @mousedown="startDrag" @mousemove="handleDrag" @mouseup="stopDrag" @mouseleave="stopDrag" @wheel.prevent="handleZoom" v-on:click.right="openMenu($event)" v-on:click.left="closeMenu()">
       <div class="content" :style="{ transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})` }">
         <!-- Contenu de votre plan de travail -->
         <Bloc
@@ -20,7 +20,7 @@
       </div>
 
 
-      <Menu :style="{top: `${yPointMenu}px` , left: `${xPointMenu}px`}" :configMenu="configMenu" />
+      <Menu :style="{top: `${yPointMenu}px` , left: `${xPointMenu}px`, transform: `scale(${xScaleMenu}, ${yScaleMenu})`}" :configMenu="configMenu" />
 
     </div>
   </template>
@@ -31,11 +31,8 @@
 
     import Bloc from './Bloc.vue';
     import Menu from './Menu.vue';
-    import blockManagerModule from '@/helpers/blockHelper.js';
 
-
-    const blockManager = new blockManagerModule
-    const allBlock = ref([
+    const allBlock = ref([ //TODO stock in bdd
       {
         position: {x: 50,y: 50},
         content: 'Boîte 1',
@@ -50,6 +47,9 @@
     const xPointMenu = ref(0)
     const yPointMenu = ref(0)
     let configMenu = ref([])
+    const xScaleMenu = ref(0)
+    const yScaleMenu = ref(0)
+
     
     
     const isDragging = ref(false);
@@ -157,6 +157,9 @@
       //? Remove basic menu  
       event.preventDefault()
 
+      xScaleMenu.value = 1
+      yScaleMenu.value = 1
+
       // console.log(event)
       this.xPointMenu = event.clientX
       this.yPointMenu = event.clientY
@@ -181,6 +184,11 @@
         }];
 
       // blockManager.newBloc("image")
+    }
+
+    function closeMenu(){
+      xScaleMenu.value = 0
+      yScaleMenu.value = 0
     }
 
     
