@@ -1,10 +1,10 @@
 <template>
-    <div class="work-plan" @mousedown="startDrag" @mousemove="handleDrag" @mouseup="stopDrag" @mouseleave="stopDrag" @wheel.prevent="handleZoom">
+    <div class="work-plan" @mousedown="startDrag" @mousemove="handleDrag" @mouseup="stopDrag" @mouseleave="stopDrag" @wheel.prevent="handleZoom" v-on:click.right="openMenu($event)" v-on:click.left="closeMenu()">
       <div class="content" :style="{ transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})` }">
         <!-- Contenu de votre plan de travail -->
         <Bloc
-          v-for="(box, index) in boxes"
-          :id="box.id"
+          v-for="(box, index) in allBlock"
+          :key="index"
           :position="box.position"
           :content="box.content"
           :scale="scale"
@@ -28,17 +28,39 @@
           Aller à la boite n°1
         </button>
       </div>
-    </div>
 
-    
+
+      <Menu :style="{top: `${yPointMenu}px` , left: `${xPointMenu}px`, transform: `scale(${xScaleMenu}, ${yScaleMenu})`}" :configMenu="configMenu" />
+
+    </div>
   </template>
   
   
   <script setup>
-    import { ref } from 'vue';
-    import Bloc from './Bloc.vue';
-    
+    import { ref, toRef } from 'vue';
 
+    import Bloc from './Bloc.vue';
+    import Menu from './Menu.vue';
+
+    const allBlock = ref([ //TODO stock in bdd
+      {
+        position: {x: 50,y: 50},
+        content: 'Boîte 1',
+        type: "image"
+      },{
+        position: {x: 200,y: 100},
+        content: 'Boîte 2',
+        type: "text"
+      }
+    ])
+
+    const xPointMenu = ref(0)
+    const yPointMenu = ref(0)
+    let configMenu = ref([])
+    const xScaleMenu = ref(0)
+    const yScaleMenu = ref(0)
+
+    
     
     const isDragging = ref(false);
 
@@ -56,7 +78,7 @@
     /*                                Blocs systems                               */
     /* -------------------------------------------------------------------------- */
 
-    const boxes = ref([{
+    /* const boxes = ref([{
                       id:"0",
                       position: {x: 50,y: 50},
                       content: 'Boîte 1',
@@ -67,7 +89,7 @@
                       content: 'Boîte 2',
                       type: "text"
                     }
-                    ]);
+                    ]); */
   
   
 
@@ -198,7 +220,48 @@
 
 
 
-  
+    /* -------------------------------------------------------------------------- */
+    /*                                 Right Click                                */
+    /* -------------------------------------------------------------------------- */
+
+    function openMenu(event){
+
+      //? Remove basic menu  
+      event.preventDefault()
+
+      xScaleMenu.value = 1
+      yScaleMenu.value = 1
+
+      // console.log(event)
+      this.xPointMenu = event.clientX
+      this.yPointMenu = event.clientY
+      configMenu = [
+        {
+          type: "leave",
+          icon: "",
+          name: "leave",
+          action: "closeMenu"
+        },
+        {
+          type: "addBlock",
+          icon: "",
+          name: "Add block",
+          action: "openMenuBlock"
+        },
+        {
+          type: "removeBlock",
+          icon: "",
+          name: "remove",
+          action: "closeMenu"
+        }];
+
+      // blockManager.newBloc("image")
+    }
+
+    function closeMenu(){
+      xScaleMenu.value = 0
+      yScaleMenu.value = 0
+    }
 
     
   </script>
