@@ -1,16 +1,16 @@
 <template>
   <div
     class="container"
-    :style="{ top: boxPosition.y + 'px', left: boxPosition.x + 'px', zIndex: index}"
+    :style="{ top: blockPosition.y + 'px', left: blockPosition.x + 'px', zIndex: index}"
     @mousedown="startDrag"
-    @mouseup="() => { stopDrag(); $emit('onUpdate', {id: props.id, position: {x:boxPosition.x, y:boxPosition.y}}); }"
+    @mouseup="() => { stopDrag(); $emit('onUpdate', {id: props.id, position: {x:blockPosition.x, y:blockPosition.y}}); }"
   >
     <!-- Votre contenu personnalisé -->
     {{ content }}
 
     <br>
 
-    <component :is="selectedComponent" @selected="setBlocTop" @unselected="unsetBlocTop"/>
+    <component :is="selectedComponent" @selected="setBlockTop" @unselected="unsetBlockTop"/>
 
   </div>
 </template>
@@ -23,7 +23,7 @@ import ImageBlock from './Blocks/ImageBlock.vue';
 let magnetEffectSize = 20;
 
 const props = defineProps(['id', 'position', 'content', 'scale', 'type']);
-const boxPosition = ref({ x: props.position.x, y: props.position.y });
+const blockPosition = ref({ x: props.position.x, y: props.position.y });
 
 const emit = defineEmits()
 
@@ -51,11 +51,11 @@ function selectComponentToCreate() {
 
 const index = ref(0);
 
-function setBlocTop(){
+function setBlockTop(){
   index.value = 10;
 }
 
-function unsetBlocTop(){
+function unsetBlockTop(){
   index.value = 0;
 }
 
@@ -84,7 +84,7 @@ onBeforeUnmount(() => {
 function startDrag(event) {
   if (event.button === 0) {
     // Is dragging
-    setBlocTop()
+    setBlockTop()
 
     isDragging.value = true;
     lastMousePosition.value = { x: event.clientX, y: event.clientY };
@@ -92,7 +92,7 @@ function startDrag(event) {
 };
 
 function updatePosition(newPosition) {
-  boxPosition.value = newPosition;
+  blockPosition.value = newPosition;
 };
 
 function handleDrag(event) {
@@ -102,12 +102,12 @@ function handleDrag(event) {
 
     const speedFactor = 1 / props.scale;
 
-    const newBoxPosition = {
-      x: boxPosition.value.x + (deltaX * speedFactor),
-      y: boxPosition.value.y + (deltaY * speedFactor),
+    const newBlockPosition = {
+      x: blockPosition.value.x + (deltaX * speedFactor),
+      y: blockPosition.value.y + (deltaY * speedFactor),
     };
 
-    updatePosition(newBoxPosition);
+    updatePosition(newBlockPosition);
 
     lastMousePosition.value = { x: event.clientX, y: event.clientY };
   }
@@ -116,16 +116,16 @@ function handleDrag(event) {
 function stopDrag(){
   if (isDragging.value) {
     // Is not dragging
-    unsetBlocTop()
+    unsetBlockTop()
 
     isDragging.value = false;
 
-    const newBoxPosition = {
-      x: Math.round(boxPosition.value.x / magnetEffectSize ) * magnetEffectSize,
-      y: Math.round(boxPosition.value.y / magnetEffectSize ) * magnetEffectSize,
+    const newBlockPosition = {
+      x: Math.round(blockPosition.value.x / magnetEffectSize ) * magnetEffectSize,
+      y: Math.round(blockPosition.value.y / magnetEffectSize ) * magnetEffectSize,
     }
 
-    updatePosition(newBoxPosition)
+    updatePosition(newBlockPosition)
   }
 };
 </script>

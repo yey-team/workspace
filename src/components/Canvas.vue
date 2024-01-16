@@ -9,7 +9,7 @@
           :content="block.content"
           :scale="scale"
           :type="block.type"
-          @onUpdate="updateBox"
+          @onUpdate="updateBlock"
         />
 
         <button @click="() => {newBlock('text'); updatePosition();}">
@@ -42,12 +42,12 @@
     import Block from './Block.vue';
     import Menu from './Menu/MenuContainer.vue';
     
-    import { boxes, newBlock } from '../helpers/blockHelper.js';
+    import { blocks, newBlock } from '../helpers/blockHelper.js';
 
 
-    // const boxes = getBoxes()
+    // const blocks = getBlocks()
 
-    const allBlock = ref(boxes)
+    const allBlock = ref(blocks)
 
     const xPointMenu = ref(0)
     const yPointMenu = ref(0)
@@ -74,10 +74,10 @@
     /* -------------------------------------------------------------------------- */
 
 
-    function getBoxByID(id){
+    function getBlockByID(id){
 
-      const boxIndex = allBlock.value.findIndex(block => block.id === id);
-      return allBlock.value[boxIndex];
+      const blockIndex = allBlock.value.findIndex(block => block.id === id);
+      return allBlock.value[blockIndex];
     }
 
 
@@ -87,16 +87,16 @@
       translate.value = {x, y}
     }
     
-    function goToBlock(boxId) {
-      const block = getBoxByID(boxId)
+    function goToBlock(blockId) {
+      const block = getBlockByID(blockId)
       goToCoords(block.position.x,block.position.y);
     }
  
 
-    function updateBox(attributes) {
+    function updateBlock(attributes) {
       console.log(attributes)
 
-      const block = getBoxByID(attributes.id)
+      const block = getBlockByID(attributes.id)
 
       block.position = attributes.position
     }
