@@ -1,6 +1,6 @@
 <template>
-    <div class="menu" id="menu">
-        <blockMenu 
+    <div class="menuContainer" id="menu">
+        <blockMenu
             v-for="(currentblockMenu, index) in props.configMenu"
             :type="currentblockMenu.type"
             :icon="currentblockMenu.icon"
@@ -23,12 +23,19 @@ console.log(props.configMenu)
 
 <style scoped>
 
-
-.menu{
+.menuContainer{
     position: absolute;
-    background-color: red;
-    width: 10px;
-    height: 10px;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-content: left;
+
+    background-color: rgb(43, 43, 43);
+    border: 2px rgb(90, 90, 90) solid;
+    border-radius: 15px;
+
 }
+
 
 </style>
