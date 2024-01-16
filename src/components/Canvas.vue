@@ -4,7 +4,7 @@
         <!-- Contenu de votre plan de travail -->
         <Block
           v-for="(box, index) in allBlock"
-          :key="index"
+          :id="box.id"
           :position="box.position"
           :content="box.content"
           :scale="scale"
@@ -94,6 +94,7 @@
  
 
     const updateBox = (attributes) => {
+      console.log(attributes)
 
       const box = getBoxByID(attributes.id)
 
