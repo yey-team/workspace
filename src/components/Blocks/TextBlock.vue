@@ -28,7 +28,7 @@ const isInside = ref(false);
 
 let mdSize = ref('200px'); // Variable pour stocker la largeur
 
-const saveMdSize = (event) => {
+function saveMdSize(event) {
   if (isInside.value) {
     mdSize.value = event.target.style.width;
   }
@@ -41,7 +41,7 @@ const saveMdSize = (event) => {
 /* -------------------------------------------------------------------------- */
 
 
-const handleClickInside = () => {
+function handleClickInside() {
   // Inside
 
   console.log("inside")
@@ -49,7 +49,7 @@ const handleClickInside = () => {
   
 };
 
-const handleClickOutside = (event) => {
+function handleClickOutside(event) {
   if (myDiv.value && !myDiv.value.contains(event.target)) {
     // Outside
 
@@ -72,7 +72,7 @@ onUnmounted(() => {
 /* -------------------------------------------------------------------------- */
 
 const md = new MarkdownIt().use(MarkdownItCheckbox);
-const renderMarkdown = () => {
+function renderMarkdown() {
   const renderedHtml = md.render(textareaContent.value);
   renderedMarkdown.value = renderedHtml;
   return renderedHtml;

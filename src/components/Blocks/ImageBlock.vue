@@ -42,7 +42,7 @@ let imageUrl = "https://helpx.adobe.com/content/dam/help/en/photoshop/using/conv
 const imgWidth = ref('500px'); // Variable pour stocker la largeur
 const imgHeight = ref('500px'); // Variable pour stocker la hauteur
 
-const saveImgSize = (event) => {
+function saveImgSize(event) {
   if (event.target.style.width){
     imgWidth.value = event.target.style.width;
     imgHeight.value = event.target.style.height;
@@ -58,7 +58,7 @@ const handleClickInside = () => {
   isInside.value = true;
 };
 
-const handleClickOutside = (event) => {
+function handleClickOutside(event) {
   if (myDiv.value && !myDiv.value.contains(event.target)) {
     isInside.value = false;
   }

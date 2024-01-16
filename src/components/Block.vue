@@ -38,7 +38,7 @@ const listOfComponents = shallowRef({"text": TextBlock,
 const selectedComponent = shallowRef(null);
 
 // Fonction pour changer le composant sélectionné
-const selectComponentToCreate = () => {
+function selectComponentToCreate() {
   selectedComponent.value = listOfComponents.value[props.type];
 };
 
@@ -51,11 +51,11 @@ const selectComponentToCreate = () => {
 
 const index = ref(0);
 
-const setBlocTop = () => {
+function setBlocTop(){
   index.value = 10;
 }
 
-const unsetBlocTop = () => {
+function unsetBlocTop(){
   index.value = 0;
 }
 
@@ -81,7 +81,7 @@ onBeforeUnmount(() => {
   document.removeEventListener('mousemove', handleDrag);
 });
 
-const startDrag = (event) => {
+function startDrag(event) {
   if (event.button === 0) {
     // Is dragging
     setBlocTop()
@@ -91,11 +91,11 @@ const startDrag = (event) => {
   }
 };
 
-const updatePosition = (newPosition) => {
+function updatePosition(newPosition) {
   boxPosition.value = newPosition;
 };
 
-const handleDrag = (event) => {
+function handleDrag(event) {
   if (isDragging.value) {
     const deltaX = event.movementX || (event.clientX - lastMousePosition.value.x);
     const deltaY = event.movementY || (event.clientY - lastMousePosition.value.y);
@@ -113,7 +113,7 @@ const handleDrag = (event) => {
   }
 };
 
-const stopDrag = () => {
+function stopDrag(){
   if (isDragging.value) {
     // Is not dragging
     unsetBlocTop()

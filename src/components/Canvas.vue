@@ -74,26 +74,26 @@
     /* -------------------------------------------------------------------------- */
 
 
-    const getBoxByID = (id) => {
+    function getBoxByID(id){
 
       const boxIndex = allBlock.value.findIndex(block => block.id === id);
       return allBlock.value[boxIndex];
     }
 
 
-    const goToCoords = (x=0, y=0) => {
+    function goToCoords(x=0, y=0) {
       x = -x * scale.value;
       y = -y * scale.value;
       translate.value = {x, y}
     }
     
-    const goToBlock = (boxId) => {
+    function goToBlock(boxId) {
       const block = getBoxByID(boxId)
       goToCoords(block.position.x,block.position.y);
     }
  
 
-    const updateBox = (attributes) => {
+    function updateBox(attributes) {
       console.log(attributes)
 
       const block = getBoxByID(attributes.id)
@@ -106,7 +106,7 @@
     /*                                 Drag system                                */
     /* -------------------------------------------------------------------------- */
 
-    const startDrag = (event) => {
+    function startDrag(event) {
       if (event.button === 1) {
         isDragging.value = true;
         lastMousePosition.value = {
@@ -121,7 +121,7 @@
     };
   
   
-    const handleDrag = (event) => {
+    function handleDrag(event) {
       if (isDragging.value) {
         const deltaX = event.clientX - lastMousePosition.value.x;
         const deltaY = event.clientY - lastMousePosition.value.y;
@@ -138,16 +138,16 @@
     };
   
   
-    const stopDrag = () => {
+    function stopDrag() {
       isDragging.value = false;
       updatePosition();
     };
     
   
   
-    const updatePosition = () => {
+    function updatePosition() {
       const glidingFactor = 0.93; // Facteur de glissement
-      const update = () => {
+      function update() {
         translate.value.x += velocity.value.x;
         translate.value.y += velocity.value.y;
         velocity.value.x *= glidingFactor;
@@ -160,7 +160,7 @@
     };
   
   
-    const handleZoom = (event) => {
+    function handleZoom(event) {
       const delta = event.deltaY;
       const zoomSpeed = 0.02;
 
