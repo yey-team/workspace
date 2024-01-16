@@ -13,7 +13,7 @@ export let boxes = [
 ];
 
 
-export function newBloc(blocType) {
+export function newBlock(blocType) {
     boxes.push(
       { id: (boxes.length + 1).toString(),
         position: {x: 0,y: 0},
@@ -27,4 +27,4 @@ export function updateBoxes(newBoxes) {
   boxes = newBoxes;
 }
 
-export default {newBloc, updateBoxes} 
+export default {newBlock, updateBoxes} 

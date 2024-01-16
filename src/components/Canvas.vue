@@ -3,19 +3,19 @@
       <div class="content" :style="{ transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})` }">
         <!-- Contenu de votre plan de travail -->
         <Block
-          v-for="(box, index) in allBlock"
-          :id="box.id"
-          :position="box.position"
-          :content="box.content"
+          v-for="(block, index) in allBlock"
+          :id="block.id"
+          :position="block.position"
+          :content="block.content"
           :scale="scale"
-          :type="box.type"
+          :type="block.type"
           @onUpdate="updateBox"
         />
 
-        <button @click="() => {newBloc('text'); updatePosition();}">
+        <button @click="() => {newBlock('text'); updatePosition();}">
           Ajouter un bloc de text
         </button>
-        <button @click="newBloc('image')">
+        <button @click="newBlock('image')">
           Ajouter un bloc d'image
         </button>
         
@@ -24,7 +24,7 @@
           Aller en 500x500
         </button>
 
-        <button @click="goToBloc('0')">
+        <button @click="goToBlock('0')">
           Aller à la boite n°1
         </button>
       </div>
@@ -42,7 +42,7 @@
     import Block from './Block.vue';
     import Menu from './Menu/MenuContainer.vue';
     
-    import { boxes, newBloc } from '../helpers/blockHelper.js';
+    import { boxes, newBlock } from '../helpers/blockHelper.js';
 
 
     // const boxes = getBoxes()
@@ -76,7 +76,7 @@
 
     const getBoxByID = (id) => {
 
-      const boxIndex = allBlock.value.findIndex(box => box.id === id);
+      const boxIndex = allBlock.value.findIndex(block => block.id === id);
       return allBlock.value[boxIndex];
     }
 
@@ -87,18 +87,18 @@
       translate.value = {x, y}
     }
     
-    const goToBloc = (boxId) => {
-      const box = getBoxByID(boxId)
-      goToCoords(box.position.x,box.position.y);
+    const goToBlock = (boxId) => {
+      const block = getBoxByID(boxId)
+      goToCoords(block.position.x,block.position.y);
     }
  
 
     const updateBox = (attributes) => {
       console.log(attributes)
 
-      const box = getBoxByID(attributes.id)
+      const block = getBoxByID(attributes.id)
 
-      box.position = attributes.position
+      block.position = attributes.position
     }
 
 
@@ -223,7 +223,7 @@
           action: "closeMenu"
         }];
 
-      // blockManager.newBloc("image")
+      // blockManager.newBlock("image")
     }
 
     function closeMenu(){

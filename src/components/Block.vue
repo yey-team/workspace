@@ -18,7 +18,7 @@
 <script setup>
 import { ref, shallowRef, onMounted, onBeforeUnmount } from 'vue';
 import TextBlock from './Blocks/TextBlock.vue';
-import ImageBloc from './Blocks/ImageBlock.vue';
+import ImageBlock from './Blocks/ImageBlock.vue';
 
 let magnetEffectSize = 20;
 
@@ -32,7 +32,7 @@ const emit = defineEmits()
 /* -------------------------------------------------------------------------- */
 
 const listOfComponents = shallowRef({"text": TextBlock, 
-                                      "image": ImageBloc
+                                      "image": ImageBlock
                                     })
 
 const selectedComponent = shallowRef(null);
