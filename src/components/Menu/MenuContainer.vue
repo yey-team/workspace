@@ -13,7 +13,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import blockMenu from './BlocMenu.vue'
+import blockMenu from './BlockMenu.vue'
 
 
 const props = defineProps(['configMenu']);
@@ -34,7 +34,6 @@ console.log(props.configMenu)
     background-color: rgb(43, 43, 43);
     border: 2px rgb(90, 90, 90) solid;
     border-radius: 15px;
-
 }
 
 

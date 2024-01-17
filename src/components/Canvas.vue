@@ -94,10 +94,7 @@
  
 
     function updateBlock(attributes) {
-      console.log(attributes)
-
       const block = getBlockByID(attributes.id)
-
       block.position = attributes.position
     }
 

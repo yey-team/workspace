@@ -43,8 +43,6 @@ function saveMdSize(event) {
 
 function handleClickInside() {
   // Inside
-
-  console.log("inside")
   isInside.value = true;
   
 };
@@ -52,7 +50,6 @@ function handleClickInside() {
 function handleClickOutside(event) {
   if (myDiv.value && !myDiv.value.contains(event.target)) {
     // Outside
-
     isInside.value = false;
     renderMarkdown();  // Ne prend pas de paramètre, utilise textareaContent.value
   }

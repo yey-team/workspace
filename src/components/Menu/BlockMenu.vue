@@ -1,5 +1,5 @@
 <template>
-    <div class="blocMenu" @click="actionButton(props.action)">
+    <div class="blockMenu" @click="actionButton(props.action)">
         {{ props.name }}
     </div>
 </template>
@@ -21,7 +21,7 @@ function actionButton(action){
 
 <style scoped>
 
-.blocMenu{
+.blockMenu{
     width: 6vw;
     height: 25px;
 
@@ -32,7 +32,7 @@ function actionButton(action){
     margin: 7px;
 }
 
-.blocMenu:hover{
+.blockMenu:hover{
     background-color: rgb(85, 85, 85);
     border-radius: 5px;
 }
