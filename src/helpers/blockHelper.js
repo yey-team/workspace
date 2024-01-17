@@ -1,4 +1,4 @@
-export let boxes = [
+export let blocks = [
   {
     id:"0",
     position: {x: 50,y: 50},
@@ -13,18 +13,18 @@ export let boxes = [
 ];
 
 
-export function newBlock(blocType) {
-    boxes.push(
-      { id: (boxes.length + 1).toString(),
+export function newBlock(blockType) {
+    blocks.push(
+      { id: (blocks.length + 1).toString(),
         position: {x: 0,y: 0},
-        content: "Boîte " + (boxes.length + 1),
-        type: blocType
+        content: "Boîte " + (blocks.length + 1),
+        type: blockType
   })
-  return (boxes.length + 1).toString()
+  return (blocks.length + 1).toString()
 }
 
-export function updateBoxes(newBoxes) {
-  boxes = newBoxes;
+export function updateBlocks(newBlocks) {
+  blocks = newBlocks;
 }
 
-export default {newBlock, updateBoxes} 
+export default {newBlock, updateBlocks} 
