@@ -31,9 +31,9 @@ console.log(props.configMenu)
     justify-content: space-around;
     align-content: left;
 
-    background-color: rgb(43, 43, 43);
-    border: 2px rgb(90, 90, 90) solid;
-    border-radius: 15px;
+    background-color: var(--main-div-color);
+    border: 2px var(--border-color) solid;
+    border-radius: var(--small-border-radius);
 }
 
 

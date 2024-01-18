@@ -10,5 +10,6 @@
 
     --border-color: #353B41;
 
-    --large-border-radius: 30px;
+    --large-border-radius: 15px;
+    --small-border-radius: 10px;
 }
