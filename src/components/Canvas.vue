@@ -42,10 +42,13 @@
     //import Block from './Block.vue';
     import Menu from './Menu/MenuContainer.vue';
     
-    import Block from '@/components/Block.vue';
-
+    import Block from './Block.vue';
 
     // const blocks = getBlocks()
+    import { blocks, newBlock } from '@/helpers/blockHelper.js';
+    import {configsMenu} from '@/helpers/configMenu.js'
+
+    console.log(configsMenu.mainMenu)
 
     const allBlock = ref(blocks)
 
@@ -200,25 +203,7 @@
       // console.log(event)
       this.xPointMenu = event.clientX
       this.yPointMenu = event.clientY
-      configMenu = [
-        {
-          type: "leave",
-          icon: "",
-          name: "leave",
-          action: "closeMenu"
-        },
-        {
-          type: "addBlock",
-          icon: "",
-          name: "Add block",
-          action: "openMenuBlock"
-        },
-        {
-          type: "removeBlock",
-          icon: "",
-          name: "remove",
-          action: "closeMenu"
-        }];
+      configMenu = configsMenu.mainMenu;
 
       // blockManager.newBlock("image")
     }
