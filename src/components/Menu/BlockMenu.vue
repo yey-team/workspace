@@ -6,15 +6,21 @@
 
 
 <script setup>
+import { ref } from 'vue';
+// import { newBlock } from '@/helpers/blockHelpers.js'
+import { blocks, newBlock } from '@/helpers/blockHelper.js';
 
-import { newBlock } from '@helpers/blockhelper.js'
 
 const props = defineProps(['type','icon','name','action']);
 
 // function call when current button is click
 function actionButton(action){
     switch(action){
-        case "":
+        case "addBlockImage":
+            newBlock("image")
+            break;
+        case "addBlockText":
+            newBlock("text")
             break;
     }
 }
