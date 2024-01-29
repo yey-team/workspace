@@ -39,10 +39,10 @@
   <script setup>
     import { ref } from 'vue';
 
-    import Block from './Block.vue';
+    //import Block from './Block.vue';
     import Menu from './Menu/MenuContainer.vue';
     
-    import { blocks, newBlock } from '../helpers/blockHelper.js';
+    import Block from '@/components/Block.vue';
 
 
     // const blocks = getBlocks()

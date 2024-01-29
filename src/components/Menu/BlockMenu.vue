@@ -7,6 +7,8 @@
 
 <script setup>
 
+import { newBlock } from '@helpers/blockhelper.js'
+
 const props = defineProps(['type','icon','name','action']);
 
 // function call when current button is click
