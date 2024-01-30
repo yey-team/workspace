@@ -48,6 +48,9 @@
     import { blocks, newBlock } from '@/helpers/blockHelper.js';
     import {configsMenu} from '@/helpers/configMenu.js'
 
+    //Import store
+    import { Store } from '@/store.js'
+
     console.log(configsMenu.mainMenu)
 
     const allBlock = ref(blocks)
@@ -203,6 +206,11 @@
       // console.log(event)
       this.xPointMenu = event.clientX
       this.yPointMenu = event.clientY
+
+      //save position of the mouse in store
+      Store.mouseX = event.clientX
+      Store.mouseY = event.clientY
+
       configMenu = configsMenu.mainMenu;
 
       // blockManager.newBlock("image")

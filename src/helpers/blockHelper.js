@@ -13,10 +13,10 @@ export let blocks = [
 ];
 
 
-export function newBlock(blockType) {
+export function newBlock(blockType, xPos = 0, yPos = 0) {
     blocks.push(
       { id: (blocks.length + 1).toString(),
-        position: {x: 0,y: 0},
+        position: {x: xPos,y: yPos},
         content: "Boîte " + (blocks.length + 1),
         type: blockType
   })
