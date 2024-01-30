@@ -210,6 +210,7 @@
       //save position of the mouse in store
       Store.mouseX = event.clientX
       Store.mouseY = event.clientY
+      console.log(Store.coordCanvas)
 
       configMenu = configsMenu.mainMenu;
 
