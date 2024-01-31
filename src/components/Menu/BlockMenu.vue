@@ -20,12 +20,16 @@ const props = defineProps(['type','icon','name','action']);
 function actionButton(action){
     switch(action){
         case "addBlockImage":
+            // Create block
             newBlock("image", storage.mouseX - storage.coordCanvas.x, storage.mouseY - storage.coordCanvas.y)
+            // Clear menu
             storage.menus = []
             break;
         case "addBlockText":
+            // Create block
             newBlock("text", storage.mouseX - storage.coordCanvas.x , storage.mouseY - storage.coordCanvas.y)
-            storage.menus = []
+            // Clear menu
+            storage.menus = [] 
             break;
         case "openMenuAddBlock":
             storage.menus.push({
