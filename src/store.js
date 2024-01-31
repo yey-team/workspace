@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { ref } from 'vue';
 
 export const Store = defineStore('store', () => {
     const mouseX = ref(0)

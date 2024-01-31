@@ -1,6 +1,7 @@
 <template>
     <div class="work-plan" @mousedown="startDrag" @mousemove="handleDrag" @mouseup="stopDrag" @mouseleave="stopDrag" @wheel.prevent="handleZoom" v-on:click.right="openMenu($event)" v-on:click.left="closeMenu()">
-      <div class="content" :style="{ transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})` }">
+      {{ storage.coordCanvas.x }}
+      <div class="content" :style="{ transform: `translate(${storage.coordCanvas.x}px, ${storage.coordCanvas.y}px) scale(${scale})` }">
         <!-- Contenu de votre plan de travail -->
         <Block
           v-for="(block, index) in allBlock"
@@ -51,7 +52,7 @@
     //Import store
     import { Store } from '@/store.js'
 
-    console.log(configsMenu.mainMenu)
+    const storage = Store()
 
     const allBlock = ref(blocks)
 
@@ -67,7 +68,7 @@
 
     const lastMousePosition = ref({x: 0,y: 0});
   
-    const translate = ref({x: 0,y: 0});
+    // const translate = ref({x: 0,y: 0});
   
     const scale = ref(1);
   
@@ -90,7 +91,8 @@
     function goToCoords(x=0, y=0) {
       x = -x * scale.value;
       y = -y * scale.value;
-      translate.value = {x, y}
+      // translate.value = {x, y}
+      storage.coordCanvas = {x, y}
     }
     
     function goToBlock(blockId) {
@@ -128,8 +130,11 @@
       if (isDragging.value) {
         const deltaX = event.clientX - lastMousePosition.value.x;
         const deltaY = event.clientY - lastMousePosition.value.y;
-        translate.value.x += deltaX;
-        translate.value.y += deltaY;
+        // translate.value.x += deltaX;
+        // translate.value.y += deltaY;
+        storage.coordCanvas.x += deltaX
+        storage.coordCanvas.y += deltaY;
+
         // Calcul de la vitesse normalisée
         velocity.value.x = deltaX / 2;
         velocity.value.y = deltaY / 2;
@@ -151,8 +156,11 @@
     function updatePosition() {
       const glidingFactor = 0.93; // Facteur de glissement
       function update() {
-        translate.value.x += velocity.value.x;
-        translate.value.y += velocity.value.y;
+        // translate.value.x += velocity.value.x;
+        // translate.value.y += velocity.value.y;
+        storage.coordCanvas.x += velocity.value.x;
+        storage.coordCanvas.y += velocity.value.y;
+
         velocity.value.x *= glidingFactor;
         velocity.value.y *= glidingFactor;
         if (Math.abs(velocity.value.x) > 0.01 || Math.abs(velocity.value.y) > 0.01) {
@@ -182,8 +190,11 @@
       const clampedScale = Math.max(minScale, Math.min(maxScale, newScale));
 
       // Ajuster la translation pour centrer le zoom au milieu de l'écran
-      translate.value.x = (translate.value.x - centerX) * (clampedScale / scale.value) + centerX;
-      translate.value.y = (translate.value.y - centerY) * (clampedScale / scale.value) + centerY;
+      // translate.value.x = (translate.value.x - centerX) * (clampedScale / scale.value) + centerX;
+      // translate.value.y = (translate.value.y - centerY) * (clampedScale / scale.value) + centerY;
+
+      storage.coordCanvas.x = (storage.coordCanvas.x - centerX) * (clampedScale / scale.value) + centerX;
+      storage.coordCanvas.y = (storage.coordCanvas.y - centerY) * (clampedScale / scale.value) + centerY;
 
       // Mettre à jour l'échelle
       scale.value = clampedScale;
@@ -194,7 +205,6 @@
     /* -------------------------------------------------------------------------- */
     /*                                 Right Click                                */
     /* -------------------------------------------------------------------------- */
-
     function openMenu(event){
 
       //? Remove basic menu  
@@ -208,9 +218,9 @@
       this.yPointMenu = event.clientY
 
       //save position of the mouse in store
-      Store.mouseX = event.clientX
-      Store.mouseY = event.clientY
-      console.log(Store.coordCanvas)
+      storage.mouseX = event.clientX
+      storage.mouseY = event.clientY
+      // console.log("toto", storage.coordCanvas.x)
 
       configMenu = configsMenu.mainMenu;
 
