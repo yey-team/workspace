@@ -7,6 +7,20 @@ export let configsMenu = {
             "action": "closeMenu"
         },
         {
+            "type": "addBlock",
+            "icon": "",
+            "name": "Add block ...",
+            "action": "openMenuAddBlock"
+        },
+        {
+            "type": "removeBlock",
+            "icon": "",
+            "name": "remove",
+            "action": "closeMenu"
+        }
+    ],
+    addBlockMenu : [
+        {
             "type": "addBlockText",
             "icon": "",
             "name": "Add block text",
@@ -17,12 +31,6 @@ export let configsMenu = {
             "icon": "",
             "name": "Add block image",
             "action": "addBlockImage"
-        },
-        {
-            "type": "removeBlock",
-            "icon": "",
-            "name": "remove",
-            "action": "closeMenu"
         }
     ]
 }

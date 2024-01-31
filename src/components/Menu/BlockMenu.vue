@@ -10,6 +10,8 @@ import { ref } from 'vue';
 // import { newBlock } from '@/helpers/blockHelpers.js'
 import { blocks, newBlock } from '@/helpers/blockHelper.js';
 import { Store } from '@/store.js'
+import {configsMenu} from '@/helpers/configMenu.js'
+
 const storage = Store()
 
 const props = defineProps(['type','icon','name','action']);
@@ -19,9 +21,18 @@ function actionButton(action){
     switch(action){
         case "addBlockImage":
             newBlock("image", storage.mouseX - storage.coordCanvas.x, storage.mouseY - storage.coordCanvas.y)
+            storage.menus = []
             break;
         case "addBlockText":
             newBlock("text", storage.mouseX - storage.coordCanvas.x , storage.mouseY - storage.coordCanvas.y)
+            storage.menus = []
+            break;
+        case "openMenuAddBlock":
+            storage.menus.push({
+                position: {x: storage.mouseX + 50,y: storage.mouseY + 0},
+                scale: {x: 1,y: 1},
+                config: configsMenu.addBlockMenu,
+            })
             break;
     }
 }

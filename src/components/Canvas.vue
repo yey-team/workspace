@@ -1,6 +1,5 @@
 <template>
-    <div class="work-plan" @mousedown="startDrag" @mousemove="handleDrag" @mouseup="stopDrag" @mouseleave="stopDrag" @wheel.prevent="handleZoom" v-on:click.right="openMenu($event)" v-on:click.left="closeMenu()">
-      {{ storage.coordCanvas.x }}
+    <div class="work-plan" :id="idWorkPlan" @mousedown="startDrag" @mousemove="handleDrag" @mouseup="stopDrag" @mouseleave="stopDrag" @wheel.prevent="handleZoom" v-on:click.right="openMenu($event)" v-on:click.left="closeMenu($event)">
       <div class="content" :style="{ transform: `translate(${storage.coordCanvas.x}px, ${storage.coordCanvas.y}px) scale(${scale})` }">
         <!-- Contenu de votre plan de travail -->
         <Block
@@ -12,13 +11,6 @@
           :type="block.type"
           @onUpdate="updateBlock"
         />
-
-        <button @click="() => {newBlock('text'); updatePosition();}">
-          Ajouter un bloc de text
-        </button>
-        <button @click="newBlock('image')">
-          Ajouter un bloc d'image
-        </button>
         
         
         <button @click="goToCoords(500,500)">
@@ -31,7 +23,12 @@
       </div>
 
 
-      <Menu :style="{ top: `${yPointMenu}px` , left: `${xPointMenu}px`, transform: `scale(${xScaleMenu}, ${yScaleMenu})` }" :configMenu="configMenu" />
+      <Menu 
+        v-for="(currentMenu, index) in storage.menus"
+        :key="index"
+        :configMenu="currentMenu.config" 
+        :style="{ top: `${currentMenu.position.y}px` , left: `${currentMenu.position.x}px`, transform: `scale(${currentMenu.scale.x}, ${currentMenu.scale.y})` }" 
+      />
 
     </div>
   </template>
@@ -56,14 +53,7 @@
 
     const allBlock = ref(blocks)
 
-    const xPointMenu = ref(0)
-    const yPointMenu = ref(0)
-    let configMenu = ref([])
-    const xScaleMenu = ref(0)
-    const yScaleMenu = ref(0)
 
-    
-    
     const isDragging = ref(false);
 
     const lastMousePosition = ref({x: 0,y: 0});
@@ -74,6 +64,8 @@
   
     const velocity = ref({x: 0,y: 0});
   
+
+    const idWorkPlan = ref("work-plan")
 
 
     /* -------------------------------------------------------------------------- */
@@ -91,7 +83,6 @@
     function goToCoords(x=0, y=0) {
       x = -x * scale.value;
       y = -y * scale.value;
-      // translate.value = {x, y}
       storage.coordCanvas = {x, y}
     }
     
@@ -156,8 +147,6 @@
     function updatePosition() {
       const glidingFactor = 0.93; // Facteur de glissement
       function update() {
-        // translate.value.x += velocity.value.x;
-        // translate.value.y += velocity.value.y;
         storage.coordCanvas.x += velocity.value.x;
         storage.coordCanvas.y += velocity.value.y;
 
@@ -210,26 +199,32 @@
       //? Remove basic menu  
       event.preventDefault()
 
-      xScaleMenu.value = 1
-      yScaleMenu.value = 1
-
-      // console.log(event)
-      this.xPointMenu = event.clientX
-      this.yPointMenu = event.clientY
+      // clear all existing menu
+      storage.menus = []
 
       //save position of the mouse in store
       storage.mouseX = event.clientX
       storage.mouseY = event.clientY
       // console.log("toto", storage.coordCanvas.x)
 
-      configMenu = configsMenu.mainMenu;
+      // instance new menu
+      storage.menus.push({
+        position: {x: event.clientX,y: event.clientY},
+        scale: {x: 1,y: 1},
+        config: configsMenu.mainMenu,
+      })
 
       // blockManager.newBlock("image")
     }
 
-    function closeMenu(){
-      xScaleMenu.value = 0
-      yScaleMenu.value = 0
+    function closeMenu(event){
+      // clear all menu
+      // storage.menus = []
+      // test if click is on workplan id
+      // console.log(event.srcElement.id, idWorkPlan.value)
+      if (event.srcElement.id === idWorkPlan.value) {
+        storage.menus = []
+      }
     }
 
     
