@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "curved-arrows": "^0.1.0",
     "markdown-it": "^14.0.0",
     "markdown-it-checkbox": "^1.1.0",
     "pinia": "^2.1.7",

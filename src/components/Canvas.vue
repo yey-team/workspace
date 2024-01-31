@@ -27,10 +27,14 @@
         <button @click="goToBlock('0')">
           Aller à la boite n°1
         </button>
+        
+        
+        <Arrow :startPoint="allBlock[0].position" :endPoint="allBlock[1].position"/>
       </div>
 
 
       <Menu :style="{ top: `${yPointMenu}px` , left: `${xPointMenu}px`, transform: `scale(${xScaleMenu}, ${yScaleMenu})` }" :configMenu="configMenu" />
+
 
     </div>
   </template>
@@ -41,8 +45,9 @@
 
     //import Block from './Block.vue';
     import Menu from './Menu/MenuContainer.vue';
-    
     import Block from './Block.vue';
+    import Arrow from './Arrow.vue';
+
 
     // const blocks = getBlocks()
     import { blocks, newBlock } from '@/helpers/blockHelper.js';
@@ -51,10 +56,11 @@
     //Import store
     import { Store } from '@/store.js'
 
-    console.log(configsMenu.mainMenu)
 
+    
+    
     const allBlock = ref(blocks)
-
+    
     const xPointMenu = ref(0)
     const yPointMenu = ref(0)
     let configMenu = ref([])
@@ -64,15 +70,16 @@
     
     
     const isDragging = ref(false);
-
+    
     const lastMousePosition = ref({x: 0,y: 0});
-  
+    
     const translate = ref({x: 0,y: 0});
-  
+    
     const scale = ref(1);
-  
+    
     const velocity = ref({x: 0,y: 0});
-  
+    
+
 
 
     /* -------------------------------------------------------------------------- */
