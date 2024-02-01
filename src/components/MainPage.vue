@@ -3,7 +3,7 @@
         <div class="modal-content" :style="{ height: isLoginPage ? '55.2vh' : '65.2vh' }">
             <div v-if="isLoginPage" class="login">
                 <h1>Login</h1>
-                <form action="">
+                <form @submit.prevent="sendData('login')">
                     <div class="email">
                         <label for="email">Email</label>
                         <input type="email" name="email" id="email" placeholder="yourmail@yey-team.com">
@@ -12,13 +12,14 @@
                         <label for="password">Password</label>
                         <input type="password" name="password" id="password" placeholder="******************">
                     </div>
+                    <p id="errorPlaceHolder"></p>
+                    <button type="submit">Login</button>
                 </form>
-                <button>Login</button>
                 <p @click="isLoginPage = false">No Account ?</p>
             </div>
             <div v-else class="register">
                 <h1>Register</h1>
-                <form action="">
+                <form @submit.prevent="sendData('register')">
                     <div class="informations">
                         <div class="firstname">
                             <label for="firstname">Firstname</label>
@@ -37,8 +38,9 @@
                         <label for="password">Password</label>
                         <input type="password" name="password" id="password" placeholder="******************">
                     </div>
+                    <p id="errorPlaceHolder"></p>
+                    <button type="submit">Register</button>
                 </form>
-                <button>Register</button>
                 <p @click="isLoginPage = true">You already have an account ?</p>
             </div>
         </div>
@@ -48,6 +50,78 @@
 <script setup>
 import { ref } from 'vue';
 const isLoginPage = ref(true);
+
+function getInformation(type) {
+    let informations = [];
+    if (type === 'login') {
+        informations.push(document.querySelector('.login #email').value)
+        informations.push(document.querySelector('.login #password').value)
+        return informations
+    } else if (type === 'register') {
+        informations.push(document.querySelector('.register #firstname').value)
+        informations.push(document.querySelector('.register #lastname').value)
+        informations.push(document.querySelector('.register #email').value)
+        informations.push(document.querySelector('.register #password').value)
+        return informations
+    }
+    return undefined
+}
+
+function sendData(type) {
+    showErrorLogin('')
+    if (type == "login") {
+        let result = getInformation(type);
+
+        const url = `https://workspace.yey-team.com/api/api.php?login=true&email=${result[0]}&password=${result[1]}`;
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data && data.error) {
+                    showErrorLogin(data.error)
+                } else if (data.status) {
+                    console.log('Can Log')
+                }
+            })
+            .catch(error => {
+                console.error('Error during the request:', error);
+                showErrorLogin('Error during login. Please try again.');
+            });
+    } else if (type == "register") {
+        let result = getInformation(type);
+
+        const url = `https://workspace.yey-team.com/api/api.php?register=true&firstname=${result[0]}&lastname=${result[1]}&email=${result[2]}&password=${result[3]}`;
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data && data.error) {
+                    showErrorLogin(data.error)
+                } else if (data.status) {
+                    console.log('Can Log')
+                }
+            })
+            .catch(error => {
+                console.error('Error during the request:', error);
+                showErrorLogin('Error during login. Please try again.');
+            });
+    }
+}
+
+function showErrorLogin(message) {
+    const errorPlaceHolder = document.querySelector('#errorPlaceHolder');
+    errorPlaceHolder.innerHTML = message;
+}
 </script>
   
 <style scoped>
@@ -155,6 +229,13 @@ const isLoginPage = ref(true);
 
 .modal-content .informations input {
     width: 6vw;
+}
+
+.modal-content #errorPlaceHolder {
+    position: absolute;
+    margin-top: 20vh;
+    font-size: 1vw;
+    color: red;
 }
 </style>
   
