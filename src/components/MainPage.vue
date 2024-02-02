@@ -23,16 +23,16 @@
                     <div class="informations">
                         <div class="firstname">
                             <label for="firstname">Firstname</label>
-                            <input type="text" name="firstname" id="firstname" placeholder="Johnny">
+                            <input type="text" name="firstname" id="firstname" placeholder="Steve">
                         </div>
                         <div class="lastname">
                             <label for="lastname">Lastname</label>
-                            <input type="text" name="lastname" id="lastname" placeholder="Sins">
+                            <input type="text" name="lastname" id="lastname" placeholder="Persson">
                         </div>
                     </div>
                     <div class="email">
                         <label for="email">Email</label>
-                        <input type="email" name="email" id="email" placeholder="yourmail@yey-team.com">
+                        <input type="email" name="email" id="email" placeholder="steve@mail.com">
                     </div>
                     <div class="password">
                         <label for="password">Password</label>
