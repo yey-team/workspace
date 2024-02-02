@@ -48,8 +48,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
 const isLoginPage = ref(true);
+
+const emits = defineEmits(['loginSuccess']);
 
 function getInformation(type) {
     let informations = [];
@@ -85,6 +87,7 @@ function sendData(type) {
                 if (data && data.error) {
                     showErrorLogin(data.error)
                 } else if (data.status) {
+                    emits('loginSuccess'); 
                     console.log('Can Log')
                 }
             })
@@ -108,6 +111,7 @@ function sendData(type) {
                 if (data && data.error) {
                     showErrorLogin(data.error)
                 } else if (data.status) {
+                    emits('loginSuccess'); 
                     console.log('Can Log')
                 }
             })
