@@ -33,7 +33,7 @@ function actionButton(action){
             break;
         case "openMenuAddBlock":
             storage.menus.push({
-                position: {x: storage.mouseX + 50,y: storage.mouseY + 0},
+                position: {x: storage.mouseX + 175,y: storage.mouseY + 0},
                 scale: {x: 1,y: 1},
                 config: configsMenu.addBlockMenu,
             })
@@ -46,7 +46,7 @@ function actionButton(action){
 <style scoped>
 
 .blockMenu{
-    width: 6vw;
+    width: 10vw;
     height: 25px;
 
     display: flex;
