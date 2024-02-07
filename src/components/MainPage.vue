@@ -53,6 +53,60 @@ const isLoginPage = ref(true);
 
 const emits = defineEmits(['loginSuccess']);
 
+function checkSocket() {
+    const token = localStorage.getItem('token');
+
+
+    if (token !== null) {
+        const url = `https://workspace.yey-team.com/api/api.php?tokenCheck=true&token=${token}`;
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data && data.error) {
+                    showErrorLogin(data.error)
+                } else if (data.status == "invalid-token") {
+                    return
+                } else if (data.status == "valid-connection") {
+                    emits('loginSuccess');
+                    return data
+                }
+            })
+            .catch(error => {
+                console.error('Error during the request:', error);
+                showErrorLogin('Error during login. Please try again.');
+            });
+    } else {
+        return
+    }
+}
+
+function createSocket(user_id) {
+    const url = `https://workspace.yey-team.com/api/api.php?tokenCreation=true&user_id=${user_id}`;
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP Error: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            localStorage.setItem('token', data.token);
+            // User Informations
+        })
+        .catch(error => {
+            console.error('Error during the request:', error);
+            showErrorLogin('Error during login. Please try again.');
+        });
+}
+
+
 function getInformation(type) {
     let informations = [];
     if (type === 'login') {
@@ -87,7 +141,8 @@ function sendData(type) {
                 if (data && data.error) {
                     showErrorLogin(data.error)
                 } else if (data.status) {
-                    emits('loginSuccess'); 
+                    createSocket(data.user["user-id"])
+                    emits('loginSuccess');
                     console.log('Can Log')
                 }
             })
@@ -111,7 +166,8 @@ function sendData(type) {
                 if (data && data.error) {
                     showErrorLogin(data.error)
                 } else if (data.status) {
-                    emits('loginSuccess'); 
+                    createSocket(data.user_id)
+                    emits('loginSuccess');
                     console.log('Can Log')
                 }
             })
@@ -126,6 +182,8 @@ function showErrorLogin(message) {
     const errorPlaceHolder = document.querySelector('#errorPlaceHolder');
     errorPlaceHolder.innerHTML = message;
 }
+
+checkSocket()
 </script>
   
 <style scoped>
