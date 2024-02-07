@@ -88,7 +88,7 @@ function userRegister($firstname, $lastname, $email, $password)
             } else {
                 $result = mysqli_query($connection, "INSERT INTO `users`(`user-id`, `user-email`, `user-firstname`, `user-lastname`, `user-password`) VALUES ('{$UID}','{$email}','{$firstname}','{$lastname}','{$password}')");
                 if ($result) {
-                    echo json_encode(array("status" => "insertion-success"));
+                    echo json_encode(array("status" => "insertion-success", "user_id" => $UID));
                 } else {
                     echo json_encode(array("status" => "insertion-failed", "error" => mysqli_error($connection)));
                     $isError = true;
@@ -156,6 +156,7 @@ function tokenCreation($userid)
         echo json_encode(array("status" => "failed-to-connect", "error" => mysqli_connect_error()));
     } else {
         $result = mysqli_query($connection, "INSERT INTO `token`(`token-id`, `creation_date`, `user-id`) VALUES ('{$token}','{$date}','{$userid}')");
+        echo json_encode(array("status" => "token-added", "token" => $token, "user-id" => $userid));
     }
     mysqli_close($connection);
 }
