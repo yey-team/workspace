@@ -1,3 +1,8 @@
+/* -------------------------------------------------------------------------- */
+/*                                 Interfaces                                 */
+/* -------------------------------------------------------------------------- */
+
+
 interface Block {
   id: string;
   position: { x: number; y: number };
@@ -11,6 +16,12 @@ interface Arrow {
   firstBlock: string;
   secondBlock: string;
 }
+
+
+/* -------------------------------------------------------------------------- */
+/*                                  Variables                                 */
+/* -------------------------------------------------------------------------- */
+
 
 let blocks: Block[] = [
   {
@@ -37,6 +48,11 @@ let arrows: Arrow[] = [
   },
 ];
 
+
+/* -------------------------------------------------------------------------- */
+/*                                  Functions                                 */
+/* -------------------------------------------------------------------------- */
+
 export function newBlock(blockType: string, xPos = 0, yPos = 0): string {
   const newId = (blocks.length + 1).toString();
   blocks.push({
@@ -52,6 +68,12 @@ export function newBlock(blockType: string, xPos = 0, yPos = 0): string {
 export function updateBlocks(newBlocks: Block[]): void {
   blocks = newBlocks;
 }
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                                Export datas                                */
+/* -------------------------------------------------------------------------- */
 
 const exportedData = { newBlock, updateBlocks, blocks, arrows };
 

@@ -11,6 +11,9 @@
     </div>
   </template>
   
+
+
+  
   <script setup lang="ts">
   import { defineProps } from 'vue';
   import BlockMenu from './BlockMenu.vue';
@@ -18,6 +21,9 @@
   const props = defineProps(['configMenu']);
   </script>
   
+
+
+
   <style scoped>
   .menuContainer {
     position: absolute;
