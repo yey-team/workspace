@@ -12,7 +12,6 @@
 
 <script setup lang="ts">
   import { ref } from 'vue';
-  // Importer Block avec la bonne extension (.vue)
   import Block from './Block.vue';
 
 
@@ -94,8 +93,10 @@
     const delta = event.deltaY;
     const zoomSpeed = 0.02;
     // Position du centre de l'écran
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
+    // const centerX = window.innerWidth / 2;
+    // const centerY = window.innerHeight / 2;
+    const centerX = event.clientX;
+    const centerY = event.clientY;
     // Définir des valeurs minimales et maximales pour le zoom
     const minScale = 0.1;
     const maxScale = 2.0;
