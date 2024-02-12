@@ -1,6 +1,6 @@
 <template>
   <div class="work-plan" @mousedown="startDrag" @mousemove="handleDrag" @mouseup="stopDrag" @mouseleave="stopDrag" @wheel.prevent="handleZoom">
-    <div class="content" :style="{ transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})` }">
+    <div class="content" :style="{ transform: `translate(${translate.x}px, ${translate.y}px) scale(${canvasStore.zoom})` }">
       <!-- Contenu de votre plan de travail -->
       <Block />
     </div>
@@ -31,7 +31,6 @@
   const canvasStore = useCanvasStore()
 
 
-  const scale = canvasStore.zoom;
   const velocity = ref({
     x: 0,
     y: 0
@@ -110,15 +109,16 @@
     const minScale = 0.1;
     const maxScale = 2.0;
     // Calculer le nouveau niveau de zoom
-    const newScale = scale + (delta > 0 ? -zoomSpeed : zoomSpeed);
+    const newScale = canvasStore.zoom + (delta > 0 ? -zoomSpeed : zoomSpeed);
     // Limiter le niveau de zoom dans les limites spécifiées
     const clampedScale = Math.max(minScale, Math.min(maxScale, newScale));
 
-
     // Ajuster la translation pour centrer le zoom au milieu de l'écran
-    translate.value.x = (translate.value.x - centerX) * (clampedScale / scale) + centerX;
-    translate.value.y = (translate.value.y - centerY) * (clampedScale / scale) + centerY;
-    canvasStore.setZoom(clampedScale);
+    translate.value.x = (translate.value.x - centerX) * (clampedScale / canvasStore.zoom) + centerX;
+    translate.value.y = (translate.value.y - centerY) * (clampedScale / canvasStore.zoom) + centerY;
+    canvasStore.zoom = clampedScale;
+
+    console.log(canvasStore.zoom)
   }
 </script>
 
