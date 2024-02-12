@@ -10,7 +10,9 @@
 <script setup lang="ts">
   import { ref, onMounted, onUnmounted } from 'vue';
   import exportedData from '@/helpers/blockHelper';
+  import { useCanvasStore } from '@/helpers/store';
 
+  const canvasStore = useCanvasStore()
 
   const blocks = exportedData.blocks;
   const localBlocks = JSON.parse(JSON.stringify(blocks));
@@ -33,6 +35,12 @@
     y: 0
   };
 
+  const lastMousePosition = ref({ 
+    x: 0, 
+    y: 0 
+  });
+
+
   const dragStart = (event: MouseEvent) => {
     const clickOnBlock = (event.target as HTMLElement).classList.contains('block');
     if (clickOnBlock) {
@@ -47,8 +55,17 @@
 
   const handleDrag = (event: MouseEvent) => {
     if (isDragging) {
-      testBlockPosition.value.x = event.clientX - startDrag.x;
-      testBlockPosition.value.y = event.clientY - startDrag.y;
+      const deltaX = event.movementX || (event.clientX - lastMousePosition.value.x);
+      const deltaY = event.movementY || (event.clientY - lastMousePosition.value.y);
+
+      const speedFactor = 1 / canvasStore.zoom;
+
+      testBlockPosition.value = {
+        x: testBlockPosition.value.x + (deltaX * speedFactor),
+        y: testBlockPosition.value.y + (deltaY * speedFactor),
+      };
+
+      lastMousePosition.value = { x: event.clientX, y: event.clientY };
     }
   };
 

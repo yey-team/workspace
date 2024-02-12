@@ -27,9 +27,7 @@
     y: 0
   });
 
-
   const canvasStore = useCanvasStore()
-
 
   const velocity = ref({
     x: 0,
