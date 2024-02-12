@@ -13,6 +13,8 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import Block from './Block.vue';
+  import { canvasStore } from '@/helpers/store';
+
 
 
   const isDragging = ref(false);
@@ -24,7 +26,11 @@
     x: 0,
     y: 0
   });
-  const scale = ref(1);
+
+  console.log(canvasStore.zoom);
+
+
+  const scale = canvasStore.zoom;
   const velocity = ref({
     x: 0,
     y: 0
@@ -90,6 +96,12 @@
 
 
   function handleZoom(event: WheelEvent) {
+    
+    console.log(scale)
+    console.log(scale.value)
+
+
+
     const delta = event.deltaY;
     const zoomSpeed = 0.02;
     // Position du centre de l'écran
