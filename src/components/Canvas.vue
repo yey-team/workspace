@@ -115,8 +115,6 @@
     translate.value.x = (translate.value.x - centerX) * (clampedScale / canvasStore.zoom) + centerX;
     translate.value.y = (translate.value.y - centerY) * (clampedScale / canvasStore.zoom) + centerY;
     canvasStore.zoom = clampedScale;
-
-    console.log(canvasStore.zoom)
   }
 </script>
 
