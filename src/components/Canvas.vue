@@ -13,7 +13,7 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import Block from './Block.vue';
-  import { canvasStore } from '@/helpers/store';
+  import { useCanvasStore } from '@/helpers/store';
 
 
 
@@ -27,7 +27,8 @@
     y: 0
   });
 
-  console.log(canvasStore.zoom);
+
+  const canvasStore = useCanvasStore()
 
 
   const scale = canvasStore.zoom;
@@ -96,10 +97,6 @@
 
 
   function handleZoom(event: WheelEvent) {
-    
-    console.log(scale)
-    console.log(scale.value)
-
 
 
     const delta = event.deltaY;
@@ -113,15 +110,15 @@
     const minScale = 0.1;
     const maxScale = 2.0;
     // Calculer le nouveau niveau de zoom
-    const newScale = scale.value + (delta > 0 ? -zoomSpeed : zoomSpeed);
+    const newScale = scale + (delta > 0 ? -zoomSpeed : zoomSpeed);
     // Limiter le niveau de zoom dans les limites spécifiées
     const clampedScale = Math.max(minScale, Math.min(maxScale, newScale));
 
 
     // Ajuster la translation pour centrer le zoom au milieu de l'écran
-    translate.value.x = (translate.value.x - centerX) * (clampedScale / scale.value) + centerX;
-    translate.value.y = (translate.value.y - centerY) * (clampedScale / scale.value) + centerY;
-    scale.value = clampedScale;
+    translate.value.x = (translate.value.x - centerX) * (clampedScale / scale) + centerX;
+    translate.value.y = (translate.value.y - centerY) * (clampedScale / scale) + centerY;
+    canvasStore.setZoom(clampedScale);
   }
 </script>
 
