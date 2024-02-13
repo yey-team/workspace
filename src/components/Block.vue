@@ -55,8 +55,8 @@
 
   const handleDrag = (event: MouseEvent) => {
     if (isDragging) {
-      const deltaX = event.movementX || (event.clientX - lastMousePosition.value.x);
-      const deltaY = event.movementY || (event.clientY - lastMousePosition.value.y);
+      const deltaX = event.movementX;
+      const deltaY = event.movementY;
 
       const speedFactor = 1 / canvasStore.zoom;
 
