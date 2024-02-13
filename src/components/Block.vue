@@ -1,6 +1,6 @@
 <template>
-  <div class="block" :style="{ top: `${testBlockPosition.y}px`, left: `${testBlockPosition.x}px` }">
-    {{ testBlock.type }}
+  <div v-if="testBlock" class="block" :style="{ top: `${testBlockPosition.y}px`, left: `${testBlockPosition.x}px` }">
+    {{ testBlock?.type }}
   </div>
 </template>
 
@@ -13,14 +13,32 @@
   import { useCanvasStore } from '@/helpers/store';
 
   const canvasStore = useCanvasStore()
+  const props = defineProps(["id"]) 
 
   const blocks = exportedData.blocks;
   const localBlocks = JSON.parse(JSON.stringify(blocks));
-  let testBlock = ref(localBlocks[0]);
-  let testBlockPosition = ref({
-    x: 0,
-    y: 0
-  });
+  
+  let testBlock = ref(getBlockById(localBlocks, props.id));
+  let testBlockPosition: any = undefined
+  if (testBlock.value){
+    testBlockPosition = testBlock.value.position
+  }
+
+
+  interface Block {
+      id: string;
+      position: { x: number; y: number };
+      content: string;
+      type: string;
+      links: string[];
+  }
+
+  function getBlockById(blocks: Block[], id: string): Block | undefined {
+      return blocks.find(block => block.id === id);
+  }
+
+
+
 
 
   /* -------------------------------------------------------------------------- */
@@ -29,11 +47,7 @@
 
 
   let isDragging = false;
-  
-  let startDrag = {
-    x: 0,
-    y: 0
-  };
+
 
   const lastMousePosition = ref({ 
     x: 0, 
@@ -45,10 +59,6 @@
     const clickOnBlock = (event.target as HTMLElement).classList.contains('block');
     if (clickOnBlock) {
       isDragging = true;
-      startDrag = {
-        x: event.clientX - testBlockPosition.value.x,
-        y: event.clientY - testBlockPosition.value.y
-      };
     }
   };
 

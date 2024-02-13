@@ -2,7 +2,13 @@
   <div class="work-plan" @mousedown="startDrag" @mousemove="handleDrag" @mouseup="stopDrag" @mouseleave="stopDrag" @wheel.prevent="handleZoom">
     <div class="content" :style="{ transform: `translate(${translate.x}px, ${translate.y}px) scale(${canvasStore.zoom})` }">
       <!-- Contenu de votre plan de travail -->
-      <Block />
+      <!-- <Block /> -->
+      <!-- <Block /> -->
+      <Block 
+        v-for="block in exportedData.blocks"
+        :id="block.id"
+        />
+      
     </div>
   </div>
 </template>
@@ -14,6 +20,7 @@
   import { ref } from 'vue';
   import Block from './Block.vue';
   import { useCanvasStore } from '@/helpers/store';
+  import exportedData from '@/helpers/blockHelper';
 
 
 
