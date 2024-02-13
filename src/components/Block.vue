@@ -1,6 +1,6 @@
 <template>
   <div v-if="testBlock" class="block" :style="{ top: `${testBlockPosition.y}px`, left: `${testBlockPosition.x}px` }">
-    {{ testBlock?.type }}
+    {{ testBlock.type }}
   </div>
 </template>
 
@@ -18,27 +18,11 @@
   const blocks = exportedData.blocks;
   const localBlocks = JSON.parse(JSON.stringify(blocks));
   
-  const testBlock = ref(getBlockById(localBlocks, props.id));
+  const testBlock = ref(exportedData.getBlockById(localBlocks, props.id));
   const testBlockPosition: any = ref(undefined)
   if (testBlock.value){
     testBlockPosition.value = testBlock.value.position
   }
-
-
-  interface Block {
-      id: string;
-      position: { x: number; y: number };
-      content: string;
-      type: string;
-      links: string[];
-  }
-
-  function getBlockById(blocks: Block[], id: string): Block | undefined {
-      return blocks.find(block => block.id === id);
-  }
-
-
-
 
 
   /* -------------------------------------------------------------------------- */
@@ -48,11 +32,6 @@
 
   let isDragging = false;
 
-
-  const lastMousePosition = ref({ 
-    x: 0, 
-    y: 0 
-  });
 
 
   const isClickOnBlockClass = (target: HTMLElement) => target.classList.contains('block');
@@ -81,15 +60,16 @@
         x: testBlockPosition.value.x + (deltaX * speedFactor),
         y: testBlockPosition.value.y + (deltaY * speedFactor),
       };
-
-
-      lastMousePosition.value = { x: event.clientX, y: event.clientY };
     }
   };
 
 
   function dragEnd() {
     isDragging = false;
+    if (testBlock.value){
+      testBlock.value.position = testBlockPosition.value;
+      exportedData.updateSingleBlock(testBlock.value.id, testBlock.value)
+    }
   };
 
 

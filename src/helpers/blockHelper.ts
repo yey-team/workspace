@@ -69,12 +69,24 @@ export function updateBlocks(newBlocks: Block[]): void {
   blocks = newBlocks;
 }
 
+export function updateSingleBlock(id: string, newObject: Block) {
+  const index = blocks.findIndex(objet => objet.id === id);
+
+  if (index !== -1) {
+    // Remplace l'objet à l'index trouvé par le nouvel objet
+    blocks.splice(index, 1, newObject);
+  }
+};
+
+export function getBlockById(blocks: Block[], id: string): Block | undefined {
+  return blocks.find(block => block.id === id);
+}
 
 
 /* -------------------------------------------------------------------------- */
 /*                                Export datas                                */
 /* -------------------------------------------------------------------------- */
 
-const exportedData = { newBlock, updateBlocks, blocks, arrows };
+const exportedData = { newBlock, updateBlocks, getBlockById, updateSingleBlock, blocks, arrows };
 
 export default exportedData;
