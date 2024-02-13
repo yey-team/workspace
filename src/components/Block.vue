@@ -18,10 +18,10 @@
   const blocks = exportedData.blocks;
   const localBlocks = JSON.parse(JSON.stringify(blocks));
   
-  let testBlock = ref(getBlockById(localBlocks, props.id));
-  let testBlockPosition: any = undefined
+  const testBlock = ref(getBlockById(localBlocks, props.id));
+  const testBlockPosition: any = ref(undefined)
   if (testBlock.value){
-    testBlockPosition = testBlock.value.position
+    testBlockPosition.value = testBlock.value.position
   }
 
 
@@ -55,32 +55,40 @@
   });
 
 
-  const dragStart = (event: MouseEvent) => {
-    const clickOnBlock = (event.target as HTMLElement).classList.contains('block');
-    if (clickOnBlock) {
+  const isClickOnBlockClass = (target: HTMLElement) => target.classList.contains('block');
+  const isClickOnBlockID = (target: HTMLElement) => testBlock.value?.id && target.classList.contains(testBlock.value.id);
+
+  function dragStart(event: MouseEvent) {
+    const clickOnBlockClass = isClickOnBlockClass(event.target as HTMLElement);
+    const clickOnBlockID = isClickOnBlockID(event.target as HTMLElement);
+
+    if (clickOnBlockClass && clickOnBlockID) {
       isDragging = true;
     }
   };
 
 
-  const handleDrag = (event: MouseEvent) => {
+
+  function handleDrag(event: MouseEvent) {
     if (isDragging) {
       const deltaX = event.movementX;
       const deltaY = event.movementY;
 
       const speedFactor = 1 / canvasStore.zoom;
 
+
       testBlockPosition.value = {
         x: testBlockPosition.value.x + (deltaX * speedFactor),
         y: testBlockPosition.value.y + (deltaY * speedFactor),
       };
+
 
       lastMousePosition.value = { x: event.clientX, y: event.clientY };
     }
   };
 
 
-  const dragEnd = () => {
+  function dragEnd() {
     isDragging = false;
   };
 

@@ -7,6 +7,7 @@
       <Block 
         v-for="block in exportedData.blocks"
         :id="block.id"
+        :class="block.id"
         />
       
     </div>
