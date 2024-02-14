@@ -22,20 +22,20 @@ interface Block {
 
 
 let blocks: Block[] = [
-  {
-    id: "0",
-    position: { x: 50, y: 50 },
-    content: 'Boîte 1',
-    type: "image",
-    links: [],
-  },
-  {
-    id: "1",
-    position: { x: 200, y: 100 },
-    content: 'Boîte 2',
-    type: "text",
-    links: [],
-  },
+  // {
+  //   id: "0",
+  //   position: { x: 50, y: 50 },
+  //   content: 'Boîte 1',
+  //   type: "image",
+  //   links: [],
+  // },
+  // {
+  //   id: "1",
+  //   position: { x: 200, y: 100 },
+  //   content: 'Boîte 2',
+  //   type: "text",
+  //   links: [],
+  // },
 ];
 
 
