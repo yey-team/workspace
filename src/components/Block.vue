@@ -9,16 +9,17 @@
 
 <script setup lang="ts">
   import { ref, onMounted, onUnmounted } from 'vue';
-  import exportedData from '@/helpers/blockHelper';
+  import exportedBlockData from '@/helpers/blockHelper';
+  import exportedArrowsData from '@/helpers/arrowsHelper';
   import { useCanvasStore } from '@/helpers/store';
 
   const canvasStore = useCanvasStore()
   const props = defineProps(["id"]) 
 
-  const blocks = exportedData.blocks;
+  const blocks = exportedBlockData.blocks;
   const localBlocks = JSON.parse(JSON.stringify(blocks));
   
-  const testBlock = ref(exportedData.getBlockById(localBlocks, props.id));
+  const testBlock = ref(exportedBlockData.getBlockById(localBlocks, props.id));
   const testBlockPosition: any = ref(undefined)
   if (testBlock.value){
     testBlockPosition.value = testBlock.value.position
@@ -68,8 +69,12 @@
     isDragging = false;
     if (testBlock.value){
       testBlock.value.position = testBlockPosition.value;
-      exportedData.updateSingleBlock(testBlock.value.id, testBlock.value)
+      exportedBlockData.updateSingleBlock(testBlock.value.id, testBlock.value)
     }
+
+    // vv Temporaire vv
+    exportedArrowsData.addArrow("0", "1")
+  
   };
 
 

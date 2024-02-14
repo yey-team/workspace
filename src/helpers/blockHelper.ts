@@ -1,3 +1,6 @@
+import {v4 as uuidv4} from 'uuid';
+
+
 /* -------------------------------------------------------------------------- */
 /*                                 Interfaces                                 */
 /* -------------------------------------------------------------------------- */
@@ -11,11 +14,6 @@ interface Block {
   links: string[];
 }
 
-interface Arrow {
-  id: string;
-  firstBlock: string;
-  secondBlock: string;
-}
 
 
 /* -------------------------------------------------------------------------- */
@@ -40,21 +38,14 @@ let blocks: Block[] = [
   },
 ];
 
-let arrows: Arrow[] = [
-  {
-    id: "0",
-    firstBlock: "0",
-    secondBlock: "1",
-  },
-];
-
 
 /* -------------------------------------------------------------------------- */
 /*                                  Functions                                 */
 /* -------------------------------------------------------------------------- */
 
 export function newBlock(blockType: string, xPos = 0, yPos = 0): string {
-  const newId = (blocks.length + 1).toString();
+  // const newId = (blocks.length + 1).toString();
+  const newId = uuidv4().toString();
   blocks.push({
     id: newId,
     position: { x: xPos, y: yPos },
@@ -87,6 +78,6 @@ export function getBlockById(blocks: Block[], id: string): Block | undefined {
 /*                                Export datas                                */
 /* -------------------------------------------------------------------------- */
 
-const exportedData = { newBlock, updateBlocks, getBlockById, updateSingleBlock, blocks, arrows };
+const exportedData = { newBlock, updateBlocks, getBlockById, updateSingleBlock, blocks };
 
 export default exportedData;
