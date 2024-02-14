@@ -18,11 +18,11 @@ interface Arrow {
 
 
 let arrows: Arrow[] = [
-  {
-    id: "0",
-    firstBlock: "0",
-    secondBlock: "1",
-  },
+  // {
+  //   id: "0",
+  //   firstBlock: "0",
+  //   secondBlock: "1",
+  // },
 ];
 
 
@@ -31,7 +31,7 @@ let arrows: Arrow[] = [
 /* -------------------------------------------------------------------------- */
 
 
-export function addArrow(from:string, to:string){
+export function newArrow(from:string, to:string){
   const newId = uuidv4();
   arrows.push({
     id: newId,
@@ -42,10 +42,14 @@ export function addArrow(from:string, to:string){
 }
 
 
+export function getArrowById(id: string): Arrow | undefined {
+  return arrows.find(arrow => arrow.id === id);
+}
+
 /* -------------------------------------------------------------------------- */
 /*                                Export datas                                */
 /* -------------------------------------------------------------------------- */
 
-const exportedData = { addArrow, arrows };
+const exportedData = { newArrow, getArrowById, arrows };
 
 export default exportedData;

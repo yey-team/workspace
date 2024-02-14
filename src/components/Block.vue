@@ -1,6 +1,6 @@
 <template>
-  <div v-if="testBlock" class="block" :style="{ top: `${testBlockPosition.y}px`, left: `${testBlockPosition.x}px` }">
-    {{ testBlock.type }}
+  <div v-if="currentBlock" class="block" :style="{ top: `${currentBlockPosition.y}px`, left: `${currentBlockPosition.x}px` }">
+    {{ currentBlock.type }}
   </div>
 </template>
 
@@ -10,7 +10,6 @@
 <script setup lang="ts">
   import { ref, onMounted, onUnmounted } from 'vue';
   import exportedBlockData from '@/helpers/blockHelper';
-  import exportedArrowsData from '@/helpers/arrowsHelper';
   import { useCanvasStore } from '@/helpers/store';
 
   const canvasStore = useCanvasStore()
@@ -19,10 +18,28 @@
   const blocks = exportedBlockData.blocks;
   const localBlocks = JSON.parse(JSON.stringify(blocks));
   
-  const testBlock = ref(exportedBlockData.getBlockById(localBlocks, props.id));
-  const testBlockPosition: any = ref(undefined)
-  if (testBlock.value){
-    testBlockPosition.value = testBlock.value.position
+  const currentBlock = ref(getBlockById(localBlocks, props.id));
+  const currentBlockPosition: any = ref(undefined)
+  if (currentBlock.value){
+    currentBlockPosition.value = currentBlock.value.position
+  }
+
+
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Define blocks                               */
+  /* -------------------------------------------------------------------------- */
+
+  interface Block {
+    id: string;
+    position: { x: number; y: number };
+    content: string;
+    type: string;
+    links: string[];
+  }
+
+  function getBlockById(blocks: Block[], id: string): Block | undefined {
+    return blocks.find(block => block.id === id);
   }
 
 
@@ -34,9 +51,8 @@
   let isDragging = false;
 
 
-
   const isClickOnBlockClass = (target: HTMLElement) => target.classList.contains('block');
-  const isClickOnBlockID = (target: HTMLElement) => testBlock.value?.id && target.classList.contains(testBlock.value.id);
+  const isClickOnBlockID = (target: HTMLElement) => currentBlock.value?.id && target.classList.contains(currentBlock.value.id);
 
   function dragStart(event: MouseEvent) {
     const clickOnBlockClass = isClickOnBlockClass(event.target as HTMLElement);
@@ -57,9 +73,9 @@
       const speedFactor = 1 / canvasStore.zoom;
 
 
-      testBlockPosition.value = {
-        x: testBlockPosition.value.x + (deltaX * speedFactor),
-        y: testBlockPosition.value.y + (deltaY * speedFactor),
+      currentBlockPosition.value = {
+        x: currentBlockPosition.value.x + (deltaX * speedFactor),
+        y: currentBlockPosition.value.y + (deltaY * speedFactor),
       };
     }
   };
@@ -67,24 +83,17 @@
 
   function dragEnd() {
     isDragging = false;
-    if (testBlock.value){
-      testBlock.value.position = testBlockPosition.value;
-      exportedBlockData.updateSingleBlock(testBlock.value.id, testBlock.value)
-    }
-
-    // vv Temporaire vv
-    exportedArrowsData.addArrow("0", "1")
-  
+    if (currentBlock.value){
+      currentBlock.value.position = currentBlockPosition.value;
+      exportedBlockData.updateSingleBlock(currentBlock.value.id, currentBlock.value)
+    }  
   };
 
 
   onMounted(() => {
     document.body.addEventListener('mousedown', dragStart);
     document.body.addEventListener('mouseup', dragEnd);
-    document.body.addEventListener('mousemove', handleDrag);
-
-
-    
+    document.body.addEventListener('mousemove', handleDrag);    
   });
 
 

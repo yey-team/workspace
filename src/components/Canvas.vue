@@ -6,6 +6,11 @@
         :id="block.id"
         :class="block.id"
         />
+
+      <Arrow 
+        v-for="arrow in exportedArrowsData.arrows"
+        :id="arrow.id"
+        />
       
     </div>
   </div>
@@ -17,8 +22,10 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import Block from './Block.vue';
+  import Arrow from './Arrow.vue';
   import { useCanvasStore } from '@/helpers/store';
   import exportedBlockData from '@/helpers/blockHelper';
+  import exportedArrowsData from '@/helpers/arrowsHelper';
 
 
   const isDragging = ref(false);
@@ -44,6 +51,7 @@
     // ↓↓ Temporaire ↓↓
     exportedBlockData.newBlock("image", 50, 50)
     exportedBlockData.newBlock("text", 200, 100)
+    exportedArrowsData.newArrow(exportedBlockData.blocks[0].id, exportedBlockData.blocks[1].id)
 
 
   /* -------------------------------------------------------------------------- */

@@ -69,7 +69,10 @@ export function updateSingleBlock(id: string, newObject: Block) {
   }
 };
 
-export function getBlockById(blocks: Block[], id: string): Block | undefined {
+// export function getBlockById(id: string): Block | undefined {
+//   return blocks.find(block => block.id === id);
+// }
+export function getBlockById(id: string): Block | undefined {
   return blocks.find(block => block.id === id);
 }
 
