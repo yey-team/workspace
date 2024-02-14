@@ -72,7 +72,11 @@
 
       const speedFactor = 1 / canvasStore.zoom;
 
-
+      if (currentBlock.value){
+        currentBlock.value.position = currentBlockPosition.value;
+        exportedBlockData.updateSingleBlock(currentBlock.value.id, currentBlock.value)
+      }
+      
       currentBlockPosition.value = {
         x: currentBlockPosition.value.x + (deltaX * speedFactor),
         y: currentBlockPosition.value.y + (deltaY * speedFactor),
@@ -83,10 +87,9 @@
 
   function dragEnd() {
     isDragging = false;
-    if (currentBlock.value){
-      currentBlock.value.position = currentBlockPosition.value;
-      exportedBlockData.updateSingleBlock(currentBlock.value.id, currentBlock.value)
-    }  
+    // if (currentBlock.value){
+    //   currentBlock.value.position = currentBlockPosition.value;
+    // }  
   };
 
 
@@ -112,5 +115,6 @@
     padding: 1rem;
     background: #fff2;
     position: absolute;
+    user-select: none;
   }
 </style>
