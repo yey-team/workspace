@@ -87,9 +87,6 @@
 
   function dragEnd() {
     isDragging = false;
-    // if (currentBlock.value){
-    //   currentBlock.value.position = currentBlockPosition.value;
-    // }  
   };
 
 

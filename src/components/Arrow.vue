@@ -1,38 +1,50 @@
 <template>
-
   <div class="arrow" :style="{ top: `${tempArrowPosition.y}px`, left: `${tempArrowPosition.x}px` }">
-    Flèche
+    
   </div>
-
 </template>
 
 
 
 
 <script setup lang="ts">
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Imports                                  */
+  /* -------------------------------------------------------------------------- */
+
   import { ref, onMounted, onUnmounted } from 'vue';
   import exportedArrowsData from '@/helpers/arrowsHelper';
   import exportedBlockData from '@/helpers/blockHelper';
   import { useCanvasStore } from '@/helpers/store';
 
-  const props = defineProps(["id"]) 
+  /* -------------------------------------------------------------------------- */
+  /*                                  Variables                                 */
+  /* -------------------------------------------------------------------------- */
 
+  const props = defineProps(["id"]) 
 
   const currentArrow = exportedArrowsData.getArrowById(props.id);
   
   const tempArrowPosition: any = ref(undefined)
   const currentArrowPosition: any = ref(undefined)
 
+  const firstBlockPosition = ref({x:0,y:0})
+  const secondBlockPosition = ref({x:0,y:0})
+
   if (currentArrow){
     
     const firstBlock = exportedBlockData.getBlockById(currentArrow.firstBlock);
     const secondBlock = exportedBlockData.getBlockById(currentArrow.secondBlock);
     
+    if (firstBlock && secondBlock){
+      firstBlockPosition.value = firstBlock.position
+      secondBlockPosition.value = secondBlock.position
+    }
+
     updateArrowPosition(firstBlock, secondBlock)
-
-
   }
-
+ 
 
 
 /* -------------------------------------------------------------------------- */
