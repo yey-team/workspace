@@ -1,7 +1,6 @@
 <template>
   <template v-if="!isLogged">
-    T'es pas connecté
-    <!-- <MainPage @loginSuccess="updateIsLogged" /> -->
+    <MainPage @loginSuccess="updateIsLogged" />
   </template>
   <template v-else-if="isLogged">
     <Canvas/>
@@ -11,7 +10,7 @@
 <script setup lang="ts">
  
   import Canvas from './components/Canvas.vue';
-  // import MainPage from './components/MainPage.vue';
+  import MainPage from './components/MainPage.vue';
 
   import { ref } from 'vue';
 
@@ -21,8 +20,6 @@
   function updateIsLogged() {
     isLogged.value = true;
   }
-
-  updateIsLogged()
  
 </script>
 
