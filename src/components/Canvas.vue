@@ -6,17 +6,36 @@
         :id="block.id"
         :class="block.id"
         />
+        
+        
+        <button @click="goToCoords(500,500)">
+          Aller en 500x500
+        </button>
 
-      <Arrow 
+        <button @click="goToBlock('0')">
+          Aller à la boite n°1
+        </button>
+
+        <Arrow 
         v-for="arrow in exportedArrowsData.arrows"
         :id="arrow.id"
         />
-      
+      </div>
+
+
+      <Menu 
+        v-for="(currentMenu, index) in storage.menus"
+        :key="index"
+        :configMenu="currentMenu.config" 
+        :style="{ top: `${currentMenu.position.y}px` , left: `${currentMenu.position.x}px`, transform: `scale(${currentMenu.scale.x}, ${currentMenu.scale.y})` }" 
+      />
+
     </div>
-  </div>
-</template>
-
-
+  </template>
+  
+  
+  <script setup>
+    import { ref } from 'vue';
 
 
 <script setup lang="ts">
@@ -53,12 +72,31 @@
     exportedBlockData.newBlock("text", 200, 100)
     exportedArrowsData.newArrow(exportedBlockData.blocks[0].id, exportedBlockData.blocks[1].id)
 
+    const idWorkPlan = ref("work-plan")
+
 
   /* -------------------------------------------------------------------------- */
   /*                                 Système de glissement                      */
   /* -------------------------------------------------------------------------- */
 
-  
+    function goToCoords(x=0, y=0) {
+      x = -x * scale.value;
+      y = -y * scale.value;
+      storage.coordCanvas = {x, y}
+    }
+    
+    function goToBlock(blockId) {
+      const block = getBlockByID(blockId)
+      goToCoords(block.position.x,block.position.y);
+    }
+ 
+
+    function updateBlock(attributes) {
+      const block = getBlockByID(attributes.id)
+      block.position = attributes.position
+    }
+
+
   function startDrag(event: MouseEvent) {
     if (event.button === 1) {
       isDragging.value = true;
@@ -134,6 +172,42 @@
     translate.value.x = (translate.value.x - centerX) * (clampedScale / canvasStore.zoom) + centerX;
     translate.value.y = (translate.value.y - centerY) * (clampedScale / canvasStore.zoom) + centerY;
     canvasStore.zoom = clampedScale;
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /*                                 Right Click                                */
+  /* -------------------------------------------------------------------------- */
+  function openMenu(event){
+
+    //? Remove basic menu  
+    event.preventDefault()
+
+    // clear all existing menu
+    storage.menus = []
+
+    //save position of the mouse in store
+    storage.mouseX = event.clientX
+    storage.mouseY = event.clientY
+    // console.log("toto", storage.coordCanvas.x)
+
+    // instance new menu
+    storage.menus.push({
+      position: {x: event.clientX,y: event.clientY},
+      scale: {x: 1,y: 1},
+      config: configsMenu.mainMenu,
+    })
+
+    // blockManager.newBlock("image")
+  }
+
+  function closeMenu(event){
+    // clear all menu
+    // storage.menus = []
+    // test if click is on workplan id
+    // console.log(event.srcElement.id, idWorkPlan.value)
+    if (event.srcElement.id === idWorkPlan.value) {
+      storage.menus = []
+    }
   }
 </script>
 

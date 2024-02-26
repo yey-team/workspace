@@ -21,9 +21,20 @@
         switch (action) {
             case 'addBlockImage':
                 newBlock('image', store.mouseX, store.mouseY);
+                // Clear menu
+                storage.menus = []
                 break;
             case 'addBlockText':
                 newBlock('text', store.mouseX, store.mouseY);
+                // Clear menu
+                storage.menus = []
+                break;
+            case "openMenuAddBlock":
+                storage.menus.push({
+                    position: {x: storage.mouseX + 175,y: storage.mouseY + 0},
+                    scale: {x: 1,y: 1},
+                    config: configsMenu.addBlockMenu,
+                })
                 break;
         }
     }
