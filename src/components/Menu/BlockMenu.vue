@@ -5,7 +5,6 @@
 </template>
   
 <script setup lang="ts">
-    import { defineProps } from 'vue';
     import exportedData from '@/helpers/blockHelper';
     import { useMenusStore, useMouseStore } from '@/helpers/store';
     import configsMenus from '@/helpers/configMenu';
