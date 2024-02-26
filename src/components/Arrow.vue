@@ -1,6 +1,6 @@
 <template>
   <div class="arrow" :style="{ top: `${tempArrowPosition.y}px`, left: `${tempArrowPosition.x}px` }">
-    
+    Arrow
   </div>
 </template>
 
