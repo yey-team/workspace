@@ -47,8 +47,8 @@
     </div>
 </template>
 
-<script setup>
-import { ref, defineEmits } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 const isLoginPage = ref(true);
 
 const emits = defineEmits(['loginSuccess']);
@@ -86,7 +86,7 @@ function checkSocket() {
     }
 }
 
-function createSocket(user_id) {
+function createSocket(user_id: string) {
     const url = `https://workspace.yey-team.com/api/api.php?tokenCreation=true&user_id=${user_id}`;
 
     fetch(url)
@@ -107,80 +107,89 @@ function createSocket(user_id) {
 }
 
 
-function getInformation(type) {
+function getInformation(type: string) {
     let informations = [];
     if (type === 'login') {
-        informations.push(document.querySelector('.login #email').value)
-        informations.push(document.querySelector('.login #password').value)
+        informations.push((document.querySelector('.login #email') as HTMLInputElement).value)
+        informations.push((document.querySelector('.login #password') as HTMLInputElement).value)
         return informations
     } else if (type === 'register') {
-        informations.push(document.querySelector('.register #firstname').value)
-        informations.push(document.querySelector('.register #lastname').value)
-        informations.push(document.querySelector('.register #email').value)
-        informations.push(document.querySelector('.register #password').value)
+        informations.push((document.querySelector('.register #firstname') as HTMLInputElement).value)
+        informations.push((document.querySelector('.register #lastname') as HTMLInputElement).value)
+        informations.push((document.querySelector('.register #email') as HTMLInputElement).value)
+        informations.push((document.querySelector('.register #password') as HTMLInputElement).value)
         return informations
     }
     return undefined
 }
 
-function sendData(type) {
+function sendData(type: string) {
     showErrorLogin('')
     if (type == "login") {
         let result = getInformation(type);
 
-        const url = `https://workspace.yey-team.com/api/api.php?login=true&email=${result[0]}&password=${result[1]}`;
+        if (result){
+            const url = `https://workspace.yey-team.com/api/api.php?login=true&email=${result[0]}&password=${result[1]}`;
+    
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP Error: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.error) {
+                        showErrorLogin(data.error)
+                    } else if (data.status) {
+                        createSocket(data.user["user-id"])
+                        emits('loginSuccess');
+                        console.log('Can Log')
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during the request:', error);
+                    showErrorLogin('Error during login. Please try again.');
+                });
+        }
 
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP Error: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data && data.error) {
-                    showErrorLogin(data.error)
-                } else if (data.status) {
-                    createSocket(data.user["user-id"])
-                    emits('loginSuccess');
-                    console.log('Can Log')
-                }
-            })
-            .catch(error => {
-                console.error('Error during the request:', error);
-                showErrorLogin('Error during login. Please try again.');
-            });
     } else if (type == "register") {
         let result = getInformation(type);
 
-        const url = `https://workspace.yey-team.com/api/api.php?register=true&firstname=${result[0]}&lastname=${result[1]}&email=${result[2]}&password=${result[3]}`;
+        if (result){
 
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP Error: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data && data.error) {
-                    showErrorLogin(data.error)
-                } else if (data.status) {
-                    createSocket(data.user_id)
-                    emits('loginSuccess');
-                    console.log('Can Log')
-                }
-            })
-            .catch(error => {
-                console.error('Error during the request:', error);
-                showErrorLogin('Error during login. Please try again.');
-            });
+            const url = `https://workspace.yey-team.com/api/api.php?register=true&firstname=${result[0]}&lastname=${result[1]}&email=${result[2]}&password=${result[3]}`;
+    
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP Error: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.error) {
+                        showErrorLogin(data.error)
+                    } else if (data.status) {
+                        createSocket(data.user_id)
+                        emits('loginSuccess');
+                        console.log('Can Log')
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during the request:', error);
+                    showErrorLogin('Error during login. Please try again.');
+                });
+        }
     }
+
 }
 
-function showErrorLogin(message) {
+function showErrorLogin(message: string) {
     const errorPlaceHolder = document.querySelector('#errorPlaceHolder');
-    errorPlaceHolder.innerHTML = message;
+    if (errorPlaceHolder){
+        errorPlaceHolder.innerHTML = message;
+    }
 }
 
 checkSocket()

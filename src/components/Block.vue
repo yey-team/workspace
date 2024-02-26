@@ -1,155 +1,117 @@
 <template>
-  <div
-    class="container"
-    :style="{ top: blockPosition.y + 'px', left: blockPosition.x + 'px', zIndex: index}"
-    @mousedown="startDrag"
-    @mouseup="() => { stopDrag(); $emit('onUpdate', {id: props.id, position: {x:blockPosition.x, y:blockPosition.y}}); }"
-  >
-    <!-- Votre contenu personnalisé -->
-    {{ content }}
-
-    <br>
-
-    <component :is="selectedComponent" @selected="setBlockTop" @unselected="unsetBlockTop"/>
-
+  <div v-if="currentBlock" class="block" :style="{ top: `${currentBlockPosition.y}px`, left: `${currentBlockPosition.x}px` }">
+    {{ currentBlock.type }}
   </div>
 </template>
 
-<script setup>
-import { ref, shallowRef, onMounted, onBeforeUnmount } from 'vue';
-import TextBlock from './Blocks/TextBlock.vue';
-import ImageBlock from './Blocks/ImageBlock.vue';
-
-let magnetEffectSize = 20;
-
-const props = defineProps(['id', 'position', 'content', 'scale', 'type']);
-const blockPosition = ref({ x: props.position.x, y: props.position.y });
-
-const emit = defineEmits()
-
-/* -------------------------------------------------------------------------- */
-/*                             Variable Component                             */
-/* -------------------------------------------------------------------------- */
-
-const listOfComponents = shallowRef({"text": TextBlock, 
-                                      "image": ImageBlock
-                                    })
-
-const selectedComponent = shallowRef(null);
-
-// Fonction pour changer le composant sélectionné
-function selectComponentToCreate() {
-  selectedComponent.value = listOfComponents.value[props.type];
-};
 
 
 
-/* -------------------------------------------------------------------------- */
-/*                                Z Index blocks                               */
-/* -------------------------------------------------------------------------- */
+<script setup lang="ts">
+  import { ref, onMounted, onUnmounted } from 'vue';
+  import exportedBlockData from '@/helpers/blockHelper';
+  import { useCanvasStore } from '@/helpers/store';
 
+  const canvasStore = useCanvasStore()
+  const props = defineProps(["id"]) 
 
-const index = ref(0);
-
-function setBlockTop(){
-  index.value = 10;
-}
-
-function unsetBlockTop(){
-  index.value = 0;
-}
-
-
-
-/* -------------------------------------------------------------------------- */
-/*                               Dragging system                              */
-/* -------------------------------------------------------------------------- */
-
-
-const isDragging = ref(false);
-const lastMousePosition = ref({ x: 0, y: 0 });
-
-
-
-
-onMounted(() => {
-  document.addEventListener('mousemove', handleDrag);
-  selectComponentToCreate()
-});
-
-onBeforeUnmount(() => {
-  document.removeEventListener('mousemove', handleDrag);
-});
-
-function startDrag(event) {
-  if (event.button === 0) {
-    // Is dragging
-    setBlockTop()
-
-    isDragging.value = true;
-    lastMousePosition.value = { x: event.clientX, y: event.clientY };
+  const blocks = exportedBlockData.blocks;
+  const localBlocks = JSON.parse(JSON.stringify(blocks));
+  
+  const currentBlock = ref(getBlockById(localBlocks, props.id));
+  const currentBlockPosition: any = ref(undefined)
+  if (currentBlock.value){
+    currentBlockPosition.value = currentBlock.value.position
   }
-};
 
-function updatePosition(newPosition) {
-  blockPosition.value = newPosition;
-};
 
-function handleDrag(event) {
-  if (isDragging.value) {
-    const deltaX = event.movementX || (event.clientX - lastMousePosition.value.x);
-    const deltaY = event.movementY || (event.clientY - lastMousePosition.value.y);
 
-    const speedFactor = 1 / props.scale;
+  /* -------------------------------------------------------------------------- */
+  /*                                Define blocks                               */
+  /* -------------------------------------------------------------------------- */
 
-    const newBlockPosition = {
-      x: blockPosition.value.x + (deltaX * speedFactor),
-      y: blockPosition.value.y + (deltaY * speedFactor),
-    };
-
-    updatePosition(newBlockPosition);
-
-    lastMousePosition.value = { x: event.clientX, y: event.clientY };
+  interface Block {
+    id: string;
+    position: { x: number; y: number };
+    content: string;
+    type: string;
+    links: string[];
   }
-};
 
-function stopDrag(){
-  if (isDragging.value) {
-    // Is not dragging
-    unsetBlockTop()
+  function getBlockById(blocks: Block[], id: string): Block | undefined {
+    return blocks.find(block => block.id === id);
+  }
 
-    isDragging.value = false;
 
-    const newBlockPosition = {
-      x: Math.round(blockPosition.value.x / magnetEffectSize ) * magnetEffectSize,
-      y: Math.round(blockPosition.value.y / magnetEffectSize ) * magnetEffectSize,
+  /* -------------------------------------------------------------------------- */
+  /*                                 Drag system                                */
+  /* -------------------------------------------------------------------------- */
+
+
+  let isDragging = false;
+
+
+  const isClickOnBlockClass = (target: HTMLElement) => target.classList.contains('block');
+  const isClickOnBlockID = (target: HTMLElement) => currentBlock.value?.id && target.classList.contains(currentBlock.value.id);
+
+  function dragStart(event: MouseEvent) {
+    const clickOnBlockClass = isClickOnBlockClass(event.target as HTMLElement);
+    const clickOnBlockID = isClickOnBlockID(event.target as HTMLElement);
+
+    if (clickOnBlockClass && clickOnBlockID) {
+      isDragging = true;
     }
+  };
 
-    updatePosition(newBlockPosition)
-  }
-};
+
+
+  function handleDrag(event: MouseEvent) {
+    if (isDragging) {
+      const deltaX = event.movementX;
+      const deltaY = event.movementY;
+
+      const speedFactor = 1 / canvasStore.zoom;
+
+      if (currentBlock.value){
+        currentBlock.value.position = currentBlockPosition.value;
+        exportedBlockData.updateSingleBlock(currentBlock.value.id, currentBlock.value)
+      }
+      
+      currentBlockPosition.value = {
+        x: currentBlockPosition.value.x + (deltaX * speedFactor),
+        y: currentBlockPosition.value.y + (deltaY * speedFactor),
+      };
+    }
+  };
+
+
+  function dragEnd() {
+    isDragging = false;
+  };
+
+
+  onMounted(() => {
+    document.body.addEventListener('mousedown', dragStart);
+    document.body.addEventListener('mouseup', dragEnd);
+    document.body.addEventListener('mousemove', handleDrag);    
+  });
+
+
+  onUnmounted(() => {
+    document.body.removeEventListener('mousedown', dragStart);
+    document.body.removeEventListener('mouseup', dragEnd);
+    document.body.removeEventListener('mousemove', handleDrag);
+  });
 </script>
 
+
+
+
 <style scoped>
-.container {
-  position: absolute;
-  background-color: var(--main-div-color);
-  padding: 1rem;
-  border-radius: var(--large-border-radius);
-  border: 1px solid var(--border-color);
-  box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.25);
-  
-  width: auto;
-  height: auto;
-
-  min-width: 200px;
-  min-height: 50px;
-
-  cursor: grab;
-  transition: transform 0.2s ease-out;
-}
-
-.container:active {
-  cursor: grabbing;
-}
+  .block {
+    padding: 1rem;
+    background: #fff2;
+    position: absolute;
+    user-select: none;
+  }
 </style>
