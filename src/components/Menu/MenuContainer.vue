@@ -1,7 +1,7 @@
 <template>
     <div class="menuContainer" id="menu">
       <block-menu
-        v-for="(currentBlockMenu, index) in configMenu"
+        v-for="(currentBlockMenu, index) in props.configMenu"
         :type="currentBlockMenu.type"
         :icon="currentBlockMenu.icon"
         :name="currentBlockMenu.name"

@@ -10,7 +10,6 @@
     import configsMenus from '@/helpers/configMenu';
 
     
-    const blocks = exportedData.blocks;
     const newBlock = exportedData.newBlock;
     const menusStore = useMenusStore();
     const mouseStore = useMouseStore();
@@ -43,7 +42,7 @@
   
 <style scoped>
     .blockMenu {
-        width: 6vw;
+        width: 10vw;
         height: 25px;
         display: flex;
         text-align: center;
