@@ -31,3 +31,17 @@ export const useCanvasStore = defineStore({
   },
 });
 
+
+export const useMenusStore = defineStore({
+  id: 'menusStore',
+  state: () => ({
+    menus: ref([] as any[]),
+  }),
+  actions: {
+    // Ajoute une mutation pour mettre à jour la valeur de zoom
+    addMenu(menu: any) {
+      this.menus.push(menu);
+    },
+  },
+});
+

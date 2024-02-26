@@ -1,4 +1,4 @@
-export let configsMenu = {
+export let configsMenus = {
     mainMenu : [
         {
             "type": "leave",
@@ -35,4 +35,4 @@ export let configsMenu = {
     ]
 }
 
-export default { configsMenu }
+export default { configsMenus }

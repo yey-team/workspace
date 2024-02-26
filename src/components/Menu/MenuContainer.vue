@@ -15,7 +15,7 @@
 
   
   <script setup lang="ts">
-  import { defineProps } from 'vue';
+  // import { defineProps } from 'vue';
   import BlockMenu from './BlockMenu.vue';
   
   const props = defineProps(['configMenu']);

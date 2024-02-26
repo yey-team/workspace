@@ -7,12 +7,14 @@
 <script setup lang="ts">
     import { defineProps } from 'vue';
     import exportedData from '@/helpers/blockHelper';
-    import useStore from '@/store';
+    import { useMenusStore, useMouseStore } from '@/helpers/store';
+    import configsMenus from '@/helpers/configMenu';
 
     
     const blocks = exportedData.blocks;
     const newBlock = exportedData.newBlock;
-    const store = useStore();
+    const menusStore = useMenusStore();
+    const mouseStore = useMouseStore();
     const props = defineProps(['type', 'icon', 'name', 'action']);
     
     
@@ -20,20 +22,20 @@
     function actionButton(action: string): void {
         switch (action) {
             case 'addBlockImage':
-                newBlock('image', store.mouseX, store.mouseY);
+                newBlock('image', mouseStore.mouseX, mouseStore.mouseY);
                 // Clear menu
-                storage.menus = []
+                menusStore.menus = []
                 break;
             case 'addBlockText':
-                newBlock('text', store.mouseX, store.mouseY);
+                newBlock('text', mouseStore.mouseX, mouseStore.mouseY);
                 // Clear menu
-                storage.menus = []
+                menusStore.menus = []
                 break;
             case "openMenuAddBlock":
-                storage.menus.push({
-                    position: {x: storage.mouseX + 175,y: storage.mouseY + 0},
+                menusStore.addMenu({
+                    position: {x: mouseStore.mouseX + 175,y: mouseStore.mouseY + 0},
                     scale: {x: 1,y: 1},
-                    config: configsMenu.addBlockMenu,
+                    config: configsMenus.configsMenus.addBlockMenu,
                 })
                 break;
         }

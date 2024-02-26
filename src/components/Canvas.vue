@@ -1,50 +1,34 @@
 <template>
-  <div class="work-plan" @mousedown="startDrag" @mousemove="handleDrag" @mouseup="stopDrag" @mouseleave="stopDrag" @wheel.prevent="handleZoom">
+  <div class="work-plan" @mousedown="startDrag" @mousemove="handleDrag" @mouseup="stopDrag" @mouseleave="stopDrag" @wheel.prevent="handleZoom" @click.right="openMenu($event)" @click.left="closeMenu($event)">
     <div class="content" :style="{ transform: `translate(${translate.x}px, ${translate.y}px) scale(${canvasStore.zoom})` }">
-      <Block 
-        v-for="block in exportedBlockData.blocks"
-        :id="block.id"
-        :class="block.id"
-        />
-        
-        
-        <button @click="goToCoords(500,500)">
-          Aller en 500x500
-        </button>
+      <Block v-for="block in exportedBlockData.blocks" :id="block.id" :class="block.id" />
+      
+      
+      <!-- <button @click="goToCoords(500,500)">
+        Aller en 500x500
+      </button>
+      <button @click="goToBlock('0')">
+        Aller à la boite n°1
+      </button> -->
 
-        <button @click="goToBlock('0')">
-          Aller à la boite n°1
-        </button>
-
-        <Arrow 
-        v-for="arrow in exportedArrowsData.arrows"
-        :id="arrow.id"
-        />
-      </div>
-
-
-      <Menu 
-        v-for="(currentMenu, index) in storage.menus"
-        :key="index"
-        :configMenu="currentMenu.config" 
-        :style="{ top: `${currentMenu.position.y}px` , left: `${currentMenu.position.x}px`, transform: `scale(${currentMenu.scale.x}, ${currentMenu.scale.y})` }" 
-      />
-
+      <Arrow v-for="arrow in exportedArrowsData.arrows" :id="arrow.id" />
+    
     </div>
-  </template>
+    
+    <Menu class="menu" v-for="(currentMenu, index) in menusStore.menus" :key="index" :configMenu="currentMenu.config" :style="{ top: `${currentMenu.position.y}px` , left: `${currentMenu.position.x}px`, transform: `scale(${currentMenu.scale.x}, ${currentMenu.scale.y})` }"/>
+  </div>
+</template>
   
-  
-  <script setup>
-    import { ref } from 'vue';
-
 
 <script setup lang="ts">
   import { ref } from 'vue';
   import Block from './Block.vue';
   import Arrow from './Arrow.vue';
-  import { useCanvasStore } from '@/helpers/store';
+  import { useCanvasStore, useMenusStore, useMouseStore } from '@/helpers/store';
   import exportedBlockData from '@/helpers/blockHelper';
   import exportedArrowsData from '@/helpers/arrowsHelper';
+  import configsMenus from '@/helpers/configMenu';
+  import Menu from './Menu/MenuContainer.vue';
 
 
   const isDragging = ref(false);
@@ -58,6 +42,8 @@
   });
 
   const canvasStore = useCanvasStore()
+  const menusStore = useMenusStore()
+  const mouseStore = useMouseStore()
 
   const velocity = ref({
     x: 0,
@@ -66,35 +52,34 @@
 
 
 
+  // ↓↓ Temporaire ↓↓
+  exportedBlockData.newBlock("image", 50, 50)
+  exportedBlockData.newBlock("text", 200, 100)
+  exportedArrowsData.newArrow(exportedBlockData.blocks[0].id, exportedBlockData.blocks[1].id)
 
-    // ↓↓ Temporaire ↓↓
-    exportedBlockData.newBlock("image", 50, 50)
-    exportedBlockData.newBlock("text", 200, 100)
-    exportedArrowsData.newArrow(exportedBlockData.blocks[0].id, exportedBlockData.blocks[1].id)
-
-    const idWorkPlan = ref("work-plan")
+  const idWorkPlan = ref("work-plan")
 
 
   /* -------------------------------------------------------------------------- */
   /*                                 Système de glissement                      */
   /* -------------------------------------------------------------------------- */
 
-    function goToCoords(x=0, y=0) {
-      x = -x * scale.value;
-      y = -y * scale.value;
-      storage.coordCanvas = {x, y}
-    }
-    
-    function goToBlock(blockId) {
-      const block = getBlockByID(blockId)
-      goToCoords(block.position.x,block.position.y);
-    }
- 
+  // function goToCoords(x=0, y=0) {
+  //   x = -x * scale.value;
+  //   y = -y * scale.value;
+  //   storage.coordCanvas = {x, y}
+  // }
+  
+  // function goToBlock(blockId) {
+  //   const block = getBlockByID(blockId)
+  //   goToCoords(block.position.x,block.position.y);
+  // }
 
-    function updateBlock(attributes) {
-      const block = getBlockByID(attributes.id)
-      block.position = attributes.position
-    }
+
+  // function updateBlock(attributes) {
+  //   const block = getBlockByID(attributes.id)
+  //   block.position = attributes.position
+  // }
 
 
   function startDrag(event: MouseEvent) {
@@ -151,8 +136,6 @@
 
 
   function handleZoom(event: WheelEvent) {
-
-
     const delta = event.deltaY;
     const zoomSpeed = 0.02;
     // Position du centre de l'écran
@@ -177,38 +160,44 @@
   /* -------------------------------------------------------------------------- */
   /*                                 Right Click                                */
   /* -------------------------------------------------------------------------- */
-  function openMenu(event){
+  function openMenu(event: MouseEvent){
 
     //? Remove basic menu  
     event.preventDefault()
 
     // clear all existing menu
-    storage.menus = []
+    menusStore.menus = []
 
     //save position of the mouse in store
-    storage.mouseX = event.clientX
-    storage.mouseY = event.clientY
+    mouseStore.mouseX = event.clientX
+    mouseStore.mouseY = event.clientY
     // console.log("toto", storage.coordCanvas.x)
 
     // instance new menu
-    storage.menus.push({
+    menusStore.addMenu({
       position: {x: event.clientX,y: event.clientY},
       scale: {x: 1,y: 1},
-      config: configsMenu.mainMenu,
+      config: configsMenus.configsMenus.mainMenu,
     })
 
     // blockManager.newBlock("image")
   }
 
-  function closeMenu(event){
-    // clear all menu
-    // storage.menus = []
-    // test if click is on workplan id
-    // console.log(event.srcElement.id, idWorkPlan.value)
-    if (event.srcElement.id === idWorkPlan.value) {
-      storage.menus = []
+
+  const isClickOnMenuClass = (target: HTMLElement) => target.classList.contains('menu');
+  const isClickOnBlockMenuClass = (target: HTMLElement) => target.classList.contains('blockMenu');
+
+  function closeMenu(event: MouseEvent) {
+    // // Utilisez target au lieu de srcElement
+    // const target = event.target as HTMLElement;
+
+    const clickOnMenuClass = isClickOnMenuClass(event.target as HTMLElement);
+    const clickOnBlockMenuClass = isClickOnBlockMenuClass(event.target as HTMLElement);
+    if (!clickOnMenuClass && !clickOnBlockMenuClass) {
+      menusStore.menus = [];
     }
   }
+
 </script>
 
 
@@ -221,10 +210,10 @@
     overflow: hidden;
     position: relative;
     transition: transform 0.2s ease-out;
-    cursor: grab;
+    /* cursor: grab; */
   }
   .work-plan:active {
-    cursor: grabbing;
+    /* cursor: grabbing; */
   }
   .content {
     position: absolute;

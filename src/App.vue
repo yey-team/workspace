@@ -1,9 +1,10 @@
 <template>
   <template v-if="!isLogged">
-    <MainPage @loginSuccess="updateIsLogged" />
+    T'es pas connecté
+    <!-- <MainPage @loginSuccess="updateIsLogged" /> -->
   </template>
   <template v-else-if="isLogged">
-    <Canvas />
+    <Canvas/>
   </template>
 </template>
 
@@ -20,6 +21,8 @@
   function updateIsLogged() {
     isLogged.value = true;
   }
+
+  updateIsLogged()
  
 </script>
 
