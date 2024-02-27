@@ -69,7 +69,7 @@
         height: '1px',
         transform: `rotate(${angle}rad)`,
         transformOrigin: '0 0',
-        background: '#000',
+        background: '#fff',
       } as { [key: string]: string };
     }
 
@@ -145,8 +145,20 @@
 <style scoped>
 .arrow {
   position: absolute;
-  border: 1px solid #000;
+  border: 1px solid #555;
   user-select: none;
   pointer-events: none;
+}
+
+.arrow::before {
+  content: '';
+  position: absolute;
+  width: 10px; /* Largeur de la flèche */
+  height: 10px; /* Hauteur de la flèche */
+  background-color: #fff;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  top: 50%; /* Ajustez la position verticale de la flèche selon vos besoins */
+  left: 100%; /* Ajustez la position horizontale de la flèche selon vos besoins */
+  transform: translate(-50%, -50%) rotate(90deg); /* Rotation de la flèche */
 }
 </style>

@@ -55,7 +55,9 @@
   // ↓↓ Temporaire ↓↓
   exportedBlockData.newBlock("image", 50, 50)
   exportedBlockData.newBlock("text", 200, 100)
+  exportedBlockData.newBlock("text", 500, 75)
   exportedArrowsData.newArrow(exportedBlockData.blocks[0].id, exportedBlockData.blocks[1].id)
+  exportedArrowsData.newArrow(exportedBlockData.blocks[0].id, exportedBlockData.blocks[2].id)
 
   const idWorkPlan = ref("work-plan")
 
