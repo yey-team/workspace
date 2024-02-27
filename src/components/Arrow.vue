@@ -1,6 +1,7 @@
 <template>
-  <div class="arrow" :style="{ top: `${tempArrowPosition.y}px`, left: `${tempArrowPosition.x}px` }">
-    Arrow
+  <!-- <div class="arrow" :style="{ top: `${tempArrowPosition.y}px`, left: `${tempArrowPosition.x}px` }"> -->
+  <div class="arrow" :style="arrowStyle">
+    <!-- Arrow -->
   </div>
 </template>
 
@@ -13,7 +14,7 @@
   /*                                   Imports                                  */
   /* -------------------------------------------------------------------------- */
 
-  import { ref, onMounted, onUnmounted } from 'vue';
+  import { ref, onMounted, onUnmounted, computed } from 'vue';
   import exportedArrowsData from '@/helpers/arrowsHelper';
   import exportedBlockData from '@/helpers/blockHelper';
   import { useCanvasStore } from '@/helpers/store';
@@ -44,6 +45,36 @@
 
     updateArrowPosition(firstBlock, secondBlock)
   }
+
+
+
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Create arrow                                */
+  /* -------------------------------------------------------------------------- */
+
+
+  const arrowStyle = computed(() => {
+    if (currentArrowPosition.value) {
+      const dx = currentArrowPosition.value.x2 - currentArrowPosition.value.x1;
+      const dy = currentArrowPosition.value.y2 - currentArrowPosition.value.y1;
+      const length = Math.sqrt(dx * dx + dy * dy);
+      const angle = Math.atan2(dy, dx);
+
+      return {
+        position: 'absolute',
+        left: `${currentArrowPosition.value.x1}px`,
+        top: `${currentArrowPosition.value.y1}px`,
+        width: `${length}px`,
+        height: '1px',
+        transform: `rotate(${angle}rad)`,
+        transformOrigin: '0 0',
+        background: '#000',
+      } as { [key: string]: string };
+    }
+
+    return {};
+  });
  
 
 
@@ -114,5 +145,8 @@
 <style scoped>
 .arrow {
   position: absolute;
+  border: 1px solid #000;
+  user-select: none;
+  pointer-events: none;
 }
 </style>
