@@ -46,10 +46,28 @@ export function getArrowById(id: string): Arrow | undefined {
   return arrows.find(arrow => arrow.id === id);
 }
 
+
+export function getTargetsByOrigin(originID: string): string[] {
+  const matchingArrows = arrows
+    .filter(obj => obj.firstBlock === originID)
+    .map(obj => obj.secondBlock);
+
+  return matchingArrows;
+}
+
+export function getOriginsByTarget(originID: string): string[] {
+  const matchingArrows = arrows
+    .filter(obj => obj.secondBlock === originID)
+    .map(obj => obj.firstBlock);
+
+  return matchingArrows;
+}
+
+
 /* -------------------------------------------------------------------------- */
 /*                                Export datas                                */
 /* -------------------------------------------------------------------------- */
 
-const exportedData = { newArrow, getArrowById, arrows };
+const exportedData = { newArrow, getArrowById, arrows, getTargetsByOrigin, getOriginsByTarget };
 
 export default exportedData;
