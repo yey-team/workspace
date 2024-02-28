@@ -9,11 +9,13 @@
 
 <script setup lang="ts">
   import { ref, onMounted, onUnmounted } from 'vue';
-  import exportedBlockData from '@/helpers/blockHelper';
+  import { useBlockStore } from '@/helpers/blockHelper';
   import { useCanvasStore } from '@/helpers/store';
 
   const canvasStore = useCanvasStore()
   const props = defineProps(["id"]) 
+
+  const exportedBlockData = useBlockStore()
 
   const blocks = exportedBlockData.blocks;
   const localBlocks = JSON.parse(JSON.stringify(blocks));

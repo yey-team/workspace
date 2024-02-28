@@ -5,11 +5,13 @@
 </template>
   
 <script setup lang="ts">
-    import exportedData from '@/helpers/blockHelper';
+    import { useBlockStore } from '@/helpers/blockHelper';
     import { useMenusStore, useMouseStore } from '@/helpers/store';
     import configsMenus from '@/helpers/configMenu';
 
     
+    const exportedData = useBlockStore()
+
     const newBlock = exportedData.newBlock;
     const menusStore = useMenusStore();
     const mouseStore = useMouseStore();
