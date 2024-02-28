@@ -64,10 +64,11 @@ const velocity = ref({
 exportedBlockData.newBlock("image", 50, 50)
 exportedBlockData.newBlock("text", 200, 100)
 exportedBlockData.newBlock("text", 500, 75)
-exportedArrowsData.newArrow(exportedBlockData.blocks[0].id, exportedBlockData.blocks[1].id)
-exportedArrowsData.newArrow(exportedBlockData.blocks[0].id, exportedBlockData.blocks[2].id)
 
-const idWorkPlan = ref("work-plan")
+exportedArrowsData.newArrow(exportedBlockData.blocks[0].id, exportedBlockData.blocks[1].id)
+exportedArrowsData.newArrow(exportedBlockData.blocks[1].id, exportedBlockData.blocks[2].id)
+// exportedArrowsData.newArrow(exportedBlockData.blocks[2].id, exportedBlockData.blocks[0].id)
+
 
 
 /* -------------------------------------------------------------------------- */
@@ -198,9 +199,6 @@ const isClickOnMenuClass = (target: HTMLElement) => target.classList.contains('m
 const isClickOnBlockMenuClass = (target: HTMLElement) => target.classList.contains('blockMenu');
 
 function closeMenu(event: MouseEvent) {
-    // // Utilisez target au lieu de srcElement
-    // const target = event.target as HTMLElement;
-
     const clickOnMenuClass = isClickOnMenuClass(event.target as HTMLElement);
     const clickOnBlockMenuClass = isClickOnBlockMenuClass(event.target as HTMLElement);
     if (!clickOnMenuClass && !clickOnBlockMenuClass) {

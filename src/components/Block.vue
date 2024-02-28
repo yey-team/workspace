@@ -1,5 +1,6 @@
 <template>
-  <div v-if="currentBlock" class="block" :style="{ top: `${currentBlockPosition.y}px`, left: `${currentBlockPosition.x}px` }">
+  <div v-if="currentBlock" class="block" :style="{ top: `${currentBlockPosition.y}px`, left: `${currentBlockPosition.x}px` }" @click="sendToLinkedBlocks">
+    {{ currentBlock.content }}
     {{ currentBlock.type }}
   </div>
 </template>
@@ -10,44 +11,54 @@
 <script setup lang="ts">
   import { ref, onMounted, onUnmounted } from 'vue';
   import { useBlockStore } from '@/helpers/blockHelper';
+  import { useArrowStore } from '@/helpers/arrowsHelper';
   import { useCanvasStore } from '@/helpers/store';
 
-  const canvasStore = useCanvasStore()
-  const props = defineProps(["id"]) 
+  const canvasStore = useCanvasStore();
+  const props = defineProps(["id"]);
 
-  const exportedBlockData = useBlockStore()
+  const exportedBlockData = useBlockStore();
+  const exportedArrowsData = useArrowStore();
 
   const blocks = exportedBlockData.blocks;
-  const localBlocks = JSON.parse(JSON.stringify(blocks));
   
-  const currentBlock = ref(getBlockById(localBlocks, props.id));
-  const currentBlockPosition: any = ref(undefined)
+  const currentBlock = ref(getBlockById(blocks, props.id));
+  const currentBlockPosition: any = ref(undefined);
   if (currentBlock.value){
-    currentBlockPosition.value = currentBlock.value.position
+    currentBlockPosition.value = currentBlock.value.position;
   }
 
 
 
 
   function test(){
+    console.log("↓↓↓↓↓↓↓↓↓↓")
+    console.log("Execution de la fonction test() du block : " + currentBlock.value?.id)
     console.log(currentBlock.value?.content)
-    console.log(currentBlock.value?.id)
+    console.log("↑↑↑↑↑↑↑↑↑↑")
+
+    console.log(" ")
   }
 
 
-  if (currentBlock.value){
-    exportedBlockData.setBlockCallback(currentBlock.value.id, test)
-  }
+  
 
 
-  exportedBlockData.blocks.forEach(block => {
+  function sendToLinkedBlocks(){
     if (currentBlock.value){
-      if (block.id != currentBlock.value.id){
-        block.callback()
-      }
-    }
-  });
+      const targetBlocks = exportedArrowsData.getTargetsByOrigin(currentBlock.value.id);
 
+      if (targetBlocks.length > 0){
+        targetBlocks.forEach(targetBlockID => {
+          const block = exportedBlockData.getBlockById(targetBlockID);
+          if (block){
+            block.callback();
+          }
+        });
+      }
+
+    }
+  }
   
 
   /* -------------------------------------------------------------------------- */
@@ -99,7 +110,7 @@
 
       if (currentBlock.value){
         currentBlock.value.position = currentBlockPosition.value;
-        exportedBlockData.updateSingleBlock(currentBlock.value.id, currentBlock.value)
+        exportedBlockData.updateSingleBlock(currentBlock.value.id, currentBlock.value);
       }
       
       currentBlockPosition.value = {
@@ -118,7 +129,14 @@
   onMounted(() => {
     document.body.addEventListener('mousedown', dragStart);
     document.body.addEventListener('mouseup', dragEnd);
-    document.body.addEventListener('mousemove', handleDrag);    
+    document.body.addEventListener('mousemove', handleDrag);
+
+
+    if (currentBlock.value){
+      exportedBlockData.setBlockCallback(currentBlock.value.id, test);
+
+      currentBlock.value = getBlockById(blocks, props.id);
+    }
   });
 
 
