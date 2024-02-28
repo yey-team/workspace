@@ -32,7 +32,7 @@ import Block from './Block.vue';
 import Arrow from './Arrow.vue';
 import { useCanvasStore, useMenusStore, useMouseStore } from '@/helpers/store';
 import { useBlockStore } from '@/helpers/blockHelper';
-import exportedArrowsData from '@/helpers/arrowsHelper';
+import { useArrowStore } from '@/helpers/arrowsHelper';
 import configsMenus from '@/helpers/configMenu';
 import Menu from './Menu/MenuContainer.vue';
 
@@ -50,13 +50,15 @@ const translate = ref({
 const canvasStore = useCanvasStore()
 const menusStore = useMenusStore()
 const mouseStore = useMouseStore()
+const exportedBlockData = useBlockStore()
+const exportedArrowsData = useArrowStore()
+
 
 const velocity = ref({
     x: 0,
     y: 0
 });
 
-const exportedBlockData = useBlockStore()
 
 // ↓↓ Temporaire ↓↓
 exportedBlockData.newBlock("image", 50, 50)

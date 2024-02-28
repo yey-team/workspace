@@ -17,7 +17,7 @@
 /* -------------------------------------------------------------------------- */
 
 import { ref, onMounted, onUnmounted, computed } from 'vue';
-import exportedArrowsData from '@/helpers/arrowsHelper';
+import { useArrowStore } from '@/helpers/arrowsHelper';
 import { useBlockStore } from '@/helpers/blockHelper';
 import { useCanvasStore } from '@/helpers/store';
 
@@ -27,6 +27,7 @@ import { useCanvasStore } from '@/helpers/store';
 
 
 const exportedBlockData = useBlockStore()
+const exportedArrowsData = useArrowStore()
 
 const props = defineProps(["id"])
 
