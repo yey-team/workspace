@@ -28,6 +28,28 @@
 
 
 
+
+  function test(){
+    console.log(currentBlock.value?.content)
+    console.log(currentBlock.value?.id)
+  }
+
+
+  if (currentBlock.value){
+    exportedBlockData.setBlockCallback(currentBlock.value.id, test)
+  }
+
+
+  exportedBlockData.blocks.forEach(block => {
+    if (currentBlock.value){
+      if (block.id != currentBlock.value.id){
+        block.callback()
+      }
+    }
+  });
+
+  
+
   /* -------------------------------------------------------------------------- */
   /*                                Define blocks                               */
   /* -------------------------------------------------------------------------- */
@@ -38,6 +60,7 @@
     content: string;
     type: string;
     links: string[];
+    callback: CallableFunction;
   }
 
   function getBlockById(blocks: Block[], id: string): Block | undefined {

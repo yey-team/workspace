@@ -7,6 +7,7 @@ interface Block {
   content: string;
   type: string;
   links: string[];
+  callback: CallableFunction;
 }
 
 export const useBlockStore = defineStore({
@@ -23,6 +24,7 @@ export const useBlockStore = defineStore({
         content: `Boîte ${this.blocks.length + 1}`,
         type: blockType,
         links: [],
+        callback: console.log, // set to console.log to do nothing (may be prettier)
       });
       return newId;
     },
@@ -40,6 +42,14 @@ export const useBlockStore = defineStore({
     getBlockById(id: string): Block | undefined {
       return this.blocks.find((block) => block.id === id);
     },
+    setBlockCallback(id: string, callback: CallableFunction){
+      const block = this.getBlockById(id);
+      if (block){
+        block.callback = callback;
+      }else{
+        console.log(`L'id ${id} n'existe pas`)
+      }
+    }
   },
 });
 
