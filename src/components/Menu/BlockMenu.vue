@@ -38,6 +38,9 @@
                     config: configsMenus.configsMenus.addBlockMenu,
                 })
                 break;
+            case "linkBlocks":
+                
+                break;
         }
     }
 </script>

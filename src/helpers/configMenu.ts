@@ -1,10 +1,10 @@
 export let configsMenus = {
     mainMenu : [
         {
-            "type": "leave",
+            "type": "link",
             "icon": "",
-            "name": "leave",
-            "action": "closeMenu"
+            "name": "Link To",
+            "action": "linkBlocks"
         },
         {
             "type": "addBlock",
