@@ -35,6 +35,10 @@
     background-color: var(--main-div-color);
     border: 2px var(--border-color) solid;
     border-radius: var(--small-border-radius);
+
+    width: fit-content;
+
+    padding: 0% 0.5%;
   }
   </style>
   
