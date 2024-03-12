@@ -3,7 +3,7 @@
 ![Version](https://img.shields.io/github/v/release/yey-team/workspace)
 
 ![Issues](https://img.shields.io/github/issues/yey-team/workspace)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/w/yey-team/workspace)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/yey-team/workspace)
 
 ![Contributors](https://img.shields.io/github/contributors/yey-team/workspace?color=dark-green)
 
