@@ -1,9 +1,11 @@
 
 # Workspace
+![Version](https://img.shields.io/github/v/release/yey-team/workspace)
 
-![Downloads](https://img.shields.io/github/downloads/yey-team/workspace/total)
-![Contributors](https://img.shields.io/github/contributors/yey-team/workspace?color=dark-green)
 ![Issues](https://img.shields.io/github/issues/yey-team/workspace)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/yey-team/workspace)
+
+![Contributors](https://img.shields.io/github/contributors/yey-team/workspace?color=dark-green)
 
 ## Table Of Contents
 
