@@ -78,4 +78,4 @@ By default app will run on [http://localhost:8080/](http://localhost:8080/)
 
 - [Math-Pixel](https://github.com/math-pixel/)
 - [Pierre-Louis ROUSSEAUX](https://github.com/P-Lrou)
-- [Ilan Outhier](https://github.com/ilanou/)
+- [Ilan](https://github.com/ilanou/)
