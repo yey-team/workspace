@@ -5,13 +5,14 @@ header('Access-Control-Allow-Headers: *');
 header('Content-Type: application/json');
 
 
-if (isset($_GET["createBlock"]) && isset($_GET["positon"]) && isset($_GET["contentType"]) && isset($_GET["content"]) && isset($_GET["creator_id"])) {
-    createBlock($_GET["positon"], $_GET["contentType"], $_GET["content"], $_GET["creator_id"]);
+if (isset($_GET["createBlock"]) && isset($_GET["positionX"]) && isset($_GET["positionY"]) && isset($_GET["contentType"]) && isset($_GET["content"]) && isset($_GET["creator_id"])) {
+    createBlock($_GET["positonX"], $_GET["positonY"], $_GET["contentType"], $_GET["content"], $_GET["creator_id"]);
+} elseif (isset($_GET["getAllBlocks"])) {
+    getAllBlocks();
 }
 
-function createBlock($position, $contentType, $content, $creator_id)
+function createBlock($positionX, $positionY, $contentType, $content, $creator_id)
 {
-    $isError = false;
     $UID = generateUniqueId();
 
     $env = parse_ini_file('.env');
@@ -23,14 +24,38 @@ function createBlock($position, $contentType, $content, $creator_id)
 
     if (!$connection) {
         echo json_encode(array("status" => "failed-to-connect", "error" => mysqli_connect_error()));
-        $isError = true;
     } else {
-        $result = mysqli_query($connection, "INSERT INTO `block`(`id`, `position`, `contentType`, `content`, `creator_id`) VALUES ('{$UID}','{$position}','{$contentType}','{$content}','{$creator_id}')");
+        $result = mysqli_query($connection, "INSERT INTO `blocks`(`id`, `positionX`, `positionY`, `contentType`, `content`, `creator_id`) VALUES ('{$UID}','{$positionX}', '{$positionY}','{$contentType}','{$content}','{$creator_id}')");
         if ($result) {
             echo json_encode(array("status" => "insertion-success", "block_id" => $UID));
         } else {
             echo json_encode(array("status" => "insertion-failed", "error" => mysqli_error($connection)));
-            $isError = true;
+        }
+    }
+}
+
+
+function getAllBlocks()
+{
+    $env = parse_ini_file('.env');
+    $usernameDB = $env['USERNAME'];
+    $passwordDB = $env['PASSWORD'];
+    $DATABASE = $env['DATABASE'];
+
+    $connection = mysqli_connect("localhost", $usernameDB, $passwordDB, $DATABASE);
+
+    if (!$connection) {
+        echo json_encode(array("status" => "failed-to-connect", "error" => mysqli_connect_error()));
+    } else {
+        $result = mysqli_query($connection, "SELECT * FROM `blocks`");
+        if ($result) {
+            $resultArray = array();
+            foreach ($result as $key => $value) {
+                array_push($resultArray, $value);
+            }
+            echo json_encode(array("status" => "successs", "result" => $resultArray));
+        } else {
+            echo json_encode(array("status" => "failed", "error" => mysqli_error($connection)));
         }
     }
 }
@@ -41,5 +66,3 @@ function generateUniqueId()
     $id = unpack('Q', $data)[1];
     return $id;
 }
-
-echo generateUniqueId();
