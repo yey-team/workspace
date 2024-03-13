@@ -9,6 +9,8 @@ if (isset($_GET["createBlock"]) && isset($_GET["positionX"]) && isset($_GET["pos
     createBlock($_GET["positonX"], $_GET["positonY"], $_GET["contentType"], $_GET["content"], $_GET["creator_id"]);
 } elseif (isset($_GET["getAllBlocks"])) {
     getAllBlocks();
+} elseif (isset($_GET["getBlock"]) && isset($_GET["blockID"])) {
+    getBlock($_GET["blockID"]);
 }
 
 function createBlock($positionX, $positionY, $contentType, $content, $creator_id)
@@ -59,6 +61,32 @@ function getAllBlocks()
         }
     }
 }
+
+function getBlock($blockID)
+{
+    $env = parse_ini_file('.env');
+    $usernameDB = $env['USERNAME'];
+    $passwordDB = $env['PASSWORD'];
+    $DATABASE = $env['DATABASE'];
+
+    $connection = mysqli_connect("localhost", $usernameDB, $passwordDB, $DATABASE);
+
+    if (!$connection) {
+        echo json_encode(array("status" => "failed-to-connect", "error" => mysqli_connect_error()));
+    } else {
+        $result = mysqli_query($connection, "SELECT * FROM `blocks` WHERE `id` = $blockID;");
+        if ($result) {
+            $resultArray = array();
+            foreach ($result as $key => $value) {
+                array_push($resultArray, $value);
+            }
+            echo json_encode(array("status" => "successs", "result" => $resultArray));
+        } else {
+            echo json_encode(array("status" => "failed", "error" => mysqli_error($connection)));
+        }
+    }
+}
+
 
 function generateUniqueId()
 {
