@@ -2,7 +2,7 @@
 
 Ce projet est un outil pour la yey team. 
 
-L'obectif est de centraliser tout les outils que nous utilisons :
+L'objectif est de centraliser tout les outils que nous utilisons :
 - Discord (chat)
 - Notion (organisation)
 - Excalidraw (schémas)
