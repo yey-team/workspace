@@ -1,22 +1,10 @@
 export let configsMenus = {
     mainMenu : [
         {
-            "type": "leave",
-            "icon": "",
-            "name": "leave",
-            "action": "closeMenu"
-        },
-        {
             "type": "addBlock",
             "icon": "",
             "name": "Add block ...",
             "action": "openMenuAddBlock"
-        },
-        {
-            "type": "removeBlock",
-            "icon": "",
-            "name": "remove",
-            "action": "closeMenu"
         }
     ],
     addBlockMenu : [

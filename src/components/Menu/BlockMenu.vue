@@ -1,5 +1,5 @@
 <template>
-    <div class="blockMenu" @click="actionButton(props.action)">
+    <div class="blockMenu" @click="actionButton($parent, props.action)">
         {{ props.name }}
     </div>
 </template>
@@ -17,9 +17,10 @@
     const mouseStore = useMouseStore();
     const props = defineProps(['type', 'icon', 'name', 'action']);
     
-    
+    const intersectionMenuX: number = 5
+
     // Fonction appelée lorsque le bouton actuel est cliqué
-    function actionButton(action: string): void {
+    function actionButton(parent: any, action: string): void {
         switch (action) {
             case 'addBlockImage':
                 newBlock('image', mouseStore.mouseX, mouseStore.mouseY);
@@ -32,8 +33,10 @@
                 menusStore.menus = []
                 break;
             case "openMenuAddBlock":
+                // console.log(parent.$el.scrollWidth)
+                let widthParent : number = parent.$el.scrollWidth
                 menusStore.addMenu({
-                    position: {x: mouseStore.mouseX + 175,y: mouseStore.mouseY + 0},
+                    position: {x: mouseStore.mouseX + widthParent + intersectionMenuX,y: mouseStore.mouseY + 0},
                     scale: {x: 1,y: 1},
                     config: configsMenus.configsMenus.addBlockMenu,
                 })
@@ -44,12 +47,9 @@
   
 <style scoped>
     .blockMenu {
-        width: 10vw;
-        height: 25px;
-        display: flex;
-        text-align: center;
-        justify-content: flex-start;
-        margin: 7px;
+        width: 100%;
+        margin: 7px 0;
+        padding: 3% 1%;
     }
     .blockMenu:hover {
         background-color: rgb(85, 85, 85);
